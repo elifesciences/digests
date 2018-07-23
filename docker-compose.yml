@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+    venv:
+        build:
+            context: .
+            dockerfile: Dockerfile.venv
+            args:
+                pipenv_dev_arg: ${PIPENV_DEV_ARG}
+                python_version: ${PYTHON_VERSION}
+        image: elifesciences/digests_venv:${IMAGE_TAG}
