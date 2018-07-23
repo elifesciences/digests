@@ -20,3 +20,4 @@ python_version = "3.6"
 
 pytest = "~=3.5.1"
 pytest-django = "~=3.2.1"
+proofreader = "~=0.0.8"
