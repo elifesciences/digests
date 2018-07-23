@@ -3,7 +3,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'bi6y(ew+jh54zu-gs#yete^c13_8f##jgq3lj9s&nfg-6!06zn'
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = '*'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -12,6 +12,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'digests',
 ]
 
 MIDDLEWARE = [
