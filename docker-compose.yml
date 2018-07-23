@@ -17,7 +17,7 @@ services:
                 image_tag: "${IMAGE_TAG}"
                 python_version: ${PYTHON_VERSION}
         image: elifesciences/digests:${IMAGE_TAG}
-        #command: venv/bin/newrelic-admin run-program venv/bin/uwsgi --ini=/srv/digests/uwsgi.ini --enable-threads
+        #command: ./migrate-placeholder-script.sh && venv/bin/newrelic-admin run-program venv/bin/uwsgi --ini=/srv/digests/uwsgi.ini --enable-threads
         command: /bin/true
         volumes: []
             #- ./config/app.cfg:/srv/digests/app.cfg
@@ -35,3 +35,9 @@ services:
             - ./config/application_user.sql:/docker-entrypoint-initdb.d/application_user.sql
         env_file:
             - dev.env
+    goaws:
+        image: elifesciences/goaws:1.0.1
+        ports:
+            - 4100:4100
+        volumes:
+            - ./config/goaws.yaml:/conf/goaws.yaml
