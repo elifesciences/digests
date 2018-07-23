@@ -29,3 +29,9 @@ services:
             #- goaws
             #- migrate
             - venv
+    db:
+        image: postgres:9.4
+        volumes:
+            - ./config/application_user.sql:/docker-entrypoint-initdb.d/application_user.sql
+        env_file:
+            - dev.env
