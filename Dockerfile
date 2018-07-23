@@ -16,8 +16,8 @@ RUN mkdir -p var/logs && \
 #    manage.py \
 #    ./
 #COPY --chown=elife:elife migrations/ migrations/
-#COPY --from=venv --chown=elife:elife ${PROJECT_FOLDER}/venv/ venv/
-#COPY --chown=elife:elife profiles/ profiles/
+COPY --from=venv --chown=elife:elife ${PROJECT_FOLDER}/venv/ venv/
+COPY --chown=elife:elife src/ src/
 
 USER www-data
 CMD ["venv/bin/python"]
