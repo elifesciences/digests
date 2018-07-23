@@ -26,11 +26,11 @@ services:
                 python_version: ${PYTHON_VERSION}
         image: elifesciences/digests:${IMAGE_TAG}
         #command: ./migrate-placeholder-script.sh && venv/bin/newrelic-admin run-program venv/bin/uwsgi --ini=/srv/digests/uwsgi.ini --enable-threads
-        command: /bin/true
-        volumes: []
+        command: venv/bin/uwsgi --ini=/srv/digests/uwsgi.ini --enable-threads
+        volumes:
             #- ./config/app.cfg:/srv/digests/app.cfg
-            #- ./config/uwsgi.ini:/srv/digests/uwsgi.ini
-            #- logs:/srv/digests/var/logs
+            - ./config/uwsgi.ini:/srv/digests/uwsgi.ini
+            - ./logs:/srv/digests/var/logs
         env_file:
             - dev.env
         depends_on:
