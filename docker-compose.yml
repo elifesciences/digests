@@ -9,3 +9,23 @@ services:
                 pipenv_dev_arg: ${PIPENV_DEV_ARG}
                 python_version: ${PYTHON_VERSION}
         image: elifesciences/digests_venv:${IMAGE_TAG}
+    wsgi:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+            args:
+                image_tag: "${IMAGE_TAG}"
+                python_version: ${PYTHON_VERSION}
+        image: elifesciences/digests:${IMAGE_TAG}
+        #command: venv/bin/newrelic-admin run-program venv/bin/uwsgi --ini=/srv/digests/uwsgi.ini --enable-threads
+        command: /bin/true
+        volumes: []
+            #- ./config/app.cfg:/srv/digests/app.cfg
+            #- ./config/uwsgi.ini:/srv/digests/uwsgi.ini
+            #- logs:/srv/digests/var/logs
+        env_file:
+            - dev.env
+        depends_on:
+            #- goaws
+            #- migrate
+            - venv
