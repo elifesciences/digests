@@ -9,6 +9,14 @@ services:
                 pipenv_dev_arg: ${PIPENV_DEV_ARG}
                 python_version: ${PYTHON_VERSION}
         image: elifesciences/digests_venv:${IMAGE_TAG}
+    web:
+        image: nginx:1.13.7
+        ports:
+            - "8080:80"
+        volumes:
+            - ./config/nginx-default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - wsgi
     wsgi:
         build: 
             context: .
