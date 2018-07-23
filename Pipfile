@@ -18,3 +18,6 @@ python_version = "3.6"
 
 [dev-packages]
 
+pytest = "~=3.5.1"
+pytest-django = "~=3.2.1"
+proofreader = "~=0.0.8"
