@@ -17,7 +17,7 @@ RUN mkdir -p var/logs && \
 #    ./
 #COPY --chown=elife:elife migrations/ migrations/
 COPY --from=venv --chown=elife:elife ${PROJECT_FOLDER}/venv/ venv/
-COPY --chown=elife:elife src/ src/
+COPY --chown=elife:elife app/ app/
 
 USER www-data
 CMD ["venv/bin/python"]
