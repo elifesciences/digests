@@ -30,7 +30,6 @@ services:
         volumes:
             #- ./config/app.cfg:/srv/digests/app.cfg
             - ./config/uwsgi.ini:/srv/digests/uwsgi.ini
-            - ./logs:/srv/digests/var/logs
         env_file:
             - dev.env
         depends_on:
