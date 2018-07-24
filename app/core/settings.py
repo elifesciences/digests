@@ -6,7 +6,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 SECRET_KEY = os.environ.get('APP_SECRET', 'secret')
 
 ENVIRONMENT = os.environ.get('APP_ENV', 'dev')
-DEBUG = ENVIRONMENT in ['ci', 'dev']
+DEBUG = bool(os.environ.get('DEBUG', 0))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
