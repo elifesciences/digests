@@ -1,8 +1,16 @@
 version: '3'
 
 services:
+    venv:
+        volumes:
+            - ./Pipfile:/srv/digests/Pipfile
+            - ./Pipfile.lock:/srv/digests/Pipfile.lock
+            - venv:/srv/digests/venv
     wsgi:
         # likely won't work well because of permission problems
         # as the container user cannot write in here
         #volumes:
         #    - ./logs:/srv/digests/var/logs
+
+volumes:
+    venv:
