@@ -9,6 +9,8 @@ name = "pypi"
 
 django = "*"
 uwsgi = "*"
+dj-database-url = "*"
+"psycopg2" = "*"
 
 
 [requires]
