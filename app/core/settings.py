@@ -1,9 +1,12 @@
 import os
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SECRET_KEY = 'bi6y(ew+jh54zu-gs#yete^c13_8f##jgq3lj9s&nfg-6!06zn'
-DEBUG = True
-ALLOWED_HOSTS = '*'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+SECRET_KEY = os.environ.get('APP_SECRET', 'secret')
+
+ENVIRONMENT = os.environ.get('ENVIRONMENT_NAME', 'dev')
+DEBUG = bool(os.environ.get('DEBUG', 0))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -13,6 +16,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'digests',
 ]
 
 MIDDLEWARE = [
@@ -46,10 +50,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # looks for `DATABASE_URL` env var
+    # e.g. DATABASE_URL=postgres://user:password@db:5432/digests
+    'default': dj_database_url.config(),
 }
 
 AUTH_PASSWORD_VALIDATORS = [
