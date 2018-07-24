@@ -37,6 +37,7 @@ elifePipeline {
                 image = DockerImage.elifesciences(this, "digests", commit)
                 image.pull()
                 image.tag('approved').push()
+                image.tag('latest').push()
             }
         }
     }
