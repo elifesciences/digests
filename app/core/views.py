@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 
 
-# pylint: disable=W0613
+# pylint: disable=unused-argument
 def ping(request):
     return HttpResponse('pong', status=200)
