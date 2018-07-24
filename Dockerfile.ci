@@ -1,0 +1,19 @@
+ARG image_tag=latest
+ARG python_version
+FROM elifesciences/digests_venv_dev:${image_tag} as venv
+FROM elifesciences/digests:${image_tag} as digests
+FROM elifesciences/python_3.6_pipenv:${python_version}
+
+ENV PROJECT_FOLDER=/srv/digests
+WORKDIR ${PROJECT_FOLDER}
+
+USER root
+RUN mkdir /var/www build && \
+    chown www-data:www-data /var/www build
+
+COPY --from=venv ${PROJECT_FOLDER}/venv/ venv/
+COPY project_tests.sh Pipfile Pipfile.lock ./
+COPY --from=digests ${PROJECT_FOLDER}/app/ app/
+
+USER www-data
+CMD ["./project_tests.sh"]

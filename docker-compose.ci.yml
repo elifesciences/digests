@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    venv:
+        build:
+            args:
+                pipenv_dev_arg:
+    venv-dev:
+        build:
+            context: .
+            dockerfile: Dockerfile.venv
+            args:
+                pipenv_dev_arg: --dev
+                python_version: ${PYTHON_VERSION}
+        image: elifesciences/digests_venv_dev:${IMAGE_TAG}
+    ci:
+        build: 
+            context: .
+            dockerfile: Dockerfile.ci
+            args:
+                python_version: ${PYTHON_VERSION}
+                image_tag: ${IMAGE_TAG}
+        image: elifesciences/digests_ci:${IMAGE_TAG}
+        #volumes:
+        #    - ./.git:/srv/digests/.git
+        env_file:
+            - dev.env
+        #environment:
+        #    - COVERALLS_REPO_TOKEN
+        depends_on:
+            - wsgi
+            - venv-dev
