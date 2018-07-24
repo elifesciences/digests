@@ -14,11 +14,11 @@ elifePipeline {
 
         stage 'Project tests', {
             dockerComposeProjectTests('digests', commit, ['/srv/digests/build/*.xml'])
-            //dockerComposeSmokeTests(commit, [
-            //    'scripts': [
-            //        'wsgi': './smoke_tests_wsgi.sh',
-            //    ],
-            //])
+            dockerComposeSmokeTests(commit, [
+                'scripts': [
+                    'wsgi': './smoke_tests_wsgi.sh',
+                ],
+            ])
         }
 
         elifeMainlineOnly {
