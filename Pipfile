@@ -1,25 +1,19 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 django = "*"
 uwsgi = "*"
 dj-database-url = "*"
 "psycopg2" = "*"
-
+uwsgi-tools = "*"
 
 [requires]
-
 python_version = "3.6"
 
-
 [dev-packages]
-
 pytest = "~=3.5.1"
 pytest-django = "~=3.2.1"
 proofreader = "~=0.0.8"
