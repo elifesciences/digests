@@ -6,5 +6,5 @@ URLPATTERNS = [
     path('ping', ping),
 ]
 
-# pylint: disable=C0103
+# pylint: disable=invalid-name
 urlpatterns = URLPATTERNS
