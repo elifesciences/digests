@@ -29,15 +29,31 @@ elifePipeline {
         }
     }
 
-
     elifeMainlineOnly {
+        stage 'End2end tests', {
+            elifeSpectrum(
+                deploy: [
+                    stackname: 'digests--end2end',
+                    revision: commit,
+                    folder: '/srv/digests'
+                ],
+                marker: 'digests'
+            )
+        }
+
+        stage 'Deploy to continuumtest', {
+            lock('digests--continuumtest') {
+                builderDeployRevision 'digests--continuumtest', commit
+                builderSmokeTests 'digests--continuumtest', '/srv/digests'
+            }
+        }
+
         stage 'Approval', {
             elifeGitMoveToBranch commit, 'approved'
             node('containers-jenkins-plugin') {
                 image = DockerImage.elifesciences(this, "digests", commit)
                 image.pull()
                 image.tag('approved').push()
-                image.tag('latest').push()
             }
         }
     }
