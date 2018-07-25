@@ -13,6 +13,9 @@ services:
                 pipenv_dev_arg: --dev
                 python_version: ${PYTHON_VERSION}
         image: elifesciences/digests_venv_dev:${IMAGE_TAG}
+    wsgi:
+        volumes:
+            - logs:/srv/digests/var/logs
     ci:
         build: 
             context: .
@@ -31,3 +34,6 @@ services:
             - wsgi
             - venv-dev
             - db
+
+volumes:
+    logs:
