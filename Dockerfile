@@ -11,11 +11,8 @@ RUN mkdir -p var/logs && \
     chown --recursive elife:elife . && \
     chown www-data:www-data var/logs
 
-COPY --chown=elife:elife \
-    smoke_tests_wsgi.sh \
-#    manage.py \
-    ./
-#COPY --chown=elife:elife migrations/ migrations/
+COPY --chown=elife:elife smoke_tests_wsgi.sh .
+COPY --chown=elife:elife migrate.sh .
 COPY --from=venv --chown=elife:elife ${PROJECT_FOLDER}/venv/ venv/
 COPY --chown=elife:elife app/ app/
 

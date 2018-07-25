@@ -10,9 +10,9 @@ def digest(digest_json: Dict) -> Digest:
     return Digest.objects.create(id=digest_json['id'],
                                  content=digest_json['content'],
                                  image=digest_json['image'],
-                                 impact_statement=digest_json['impactStatement'],
+                                 impactStatement=digest_json['impactStatement'],
                                  published=digest_json['published'],
-                                 related_content=digest_json['relatedContent'],
+                                 relatedContent=digest_json['relatedContent'],
                                  subjects=digest_json['subjects'],
                                  title=digest_json['title'],
                                  updated=digest_json['updated'])
