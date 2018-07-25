@@ -82,3 +82,5 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+DIGESTS_CONTENT_TYPE = 'application/vnd.elife.digest-list+json;version=1'
