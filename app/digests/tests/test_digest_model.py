@@ -19,6 +19,6 @@ def test_can_create_digest(digest: Digest,
     assert digest.updated == "2018-07-06T16:23:24Z"
     assert digest.content == digest_content_json
     assert digest.image == digest_image_json
-    assert digest.related_content == digest_related_content_json
+    assert digest.relatedContent == digest_related_content_json
     assert digest.subjects == digest_subjects_json
-    assert digest.impact_statement == digest_json['impactStatement']
+    assert digest.impactStatement == digest_json['impactStatement']
