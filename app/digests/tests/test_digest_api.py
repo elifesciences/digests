@@ -21,8 +21,9 @@ def test_has_expected_data_in_response(client: Client,
                                        digest_related_content_json: List[Dict],
                                        digest_subjects_json: List[Dict]):
     response = client.get('/digests')
-    data = response.data[0]
-    assert len(response.data) == 1
+    data = response.data['items'][0]
+    assert response.data['total'] == 1
+    assert len(response.data['items']) == 1
     assert data['id'] == '2'
     assert data['title'] == 'Neighborhood watch'
     assert data['published'] == "2018-07-06T09:06:01Z"

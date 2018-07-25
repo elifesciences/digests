@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from digests.models import Digest
+from digests.pagination import DigestPagination
 from digests.serializers import DigestSerializer
 
 
@@ -12,6 +13,7 @@ class DigestViewSet(viewsets.ModelViewSet):
     model = Digest
     queryset = Digest.objects.all()
     serializer_class = DigestSerializer
+    pagination_class = DigestPagination
 
     content_type = settings.DIGESTS_CONTENT_TYPE
 
