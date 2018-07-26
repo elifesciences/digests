@@ -35,6 +35,15 @@ def test_has_expected_data_in_response(client: Client,
 
 
 @pytest.mark.django_db
+def test_can_get_digest_by_id(client: Client,
+                              digest: Digest,
+                              digest_json: Dict):
+    response = client.get(f'/digests/{digest.id}')
+    assert response.data == digest_json
+    assert response.content_type == settings.DIGESTS_CONTENT_TYPE
+
+
+@pytest.mark.django_db
 def test_has_digest_content_type_header(client: Client):
     response = client.get('/digests')
     assert response.status_code == 200
