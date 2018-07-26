@@ -1,8 +1,15 @@
 from typing import Dict, List
 
 import pytest
+from rest_framework.test import APIClient
 
 from digests.models import Digest
+
+
+@pytest.fixture
+@pytest.mark.django_db
+def rest_client() -> APIClient:
+    return APIClient()
 
 
 @pytest.fixture
