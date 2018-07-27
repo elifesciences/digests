@@ -10,7 +10,7 @@ from rest_framework import viewsets, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from digests.exceptions import generate_error_string
+from digests.exceptions import validation_error_handler
 from digests.models import Digest
 from digests.pagination import DigestPagination
 from digests.serializers import DigestSerializer
@@ -43,10 +43,8 @@ class DigestViewSet(viewsets.ModelViewSet):
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         except ValidationError as err:
-            return Response(
-                {'error': generate_error_string(message=err.message, path=err.path)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            err.code = status.HTTP_400_BAD_REQUEST
+            return validation_error_handler(err)
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         queryset = self.filter_queryset(self.get_queryset())

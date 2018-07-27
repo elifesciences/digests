@@ -90,3 +90,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DIGESTS_CONTENT_TYPE = 'application/vnd.elife.digest-list+json;version=1'
+ERROR_CONTENT_TYPE = 'application/problem+json'
