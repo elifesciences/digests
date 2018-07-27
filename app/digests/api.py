@@ -1,9 +1,7 @@
-import json
-import os
 from typing import Any, Dict
 
 from django.conf import settings
-from elife_api_validator import SCHEMA_DIRECTORY
+
 from jsonschema import validate as validate_json
 from jsonschema import ValidationError
 from rest_framework import viewsets, status
@@ -14,12 +12,7 @@ from digests.exceptions import validation_error_handler
 from digests.models import Digest
 from digests.pagination import DigestPagination
 from digests.serializers import DigestSerializer
-
-
-def get_schema(schema_name: str) -> Dict:
-    with open(os.path.join(SCHEMA_DIRECTORY, schema_name)) as schema:
-        val = json.loads(schema.read())
-        return val
+from digests.utils import get_schema, get_schema_name
 
 
 class DigestViewSet(viewsets.ModelViewSet):
@@ -30,19 +23,22 @@ class DigestViewSet(viewsets.ModelViewSet):
 
     content_type = settings.DIGEST_CONTENT_TYPE
     list_content_type = settings.DIGESTS_CONTENT_TYPE
-    schema_name = 'digest.v1.json'
 
     def _create_response(self, data: Dict[str, Any]) -> Response:
         return Response(data, content_type=self.content_type)
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         try:
-            validate_json(request.data, schema=get_schema(self.schema_name))
+            schema = get_schema(get_schema_name(request.content_type))
+
+            validate_json(request.data, schema=schema)
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             headers = self.get_success_headers(serializer.data)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
         except ValidationError as err:
             err.code = status.HTTP_400_BAD_REQUEST
             return validation_error_handler(err)
