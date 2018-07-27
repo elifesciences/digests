@@ -73,7 +73,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 20,
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'digests.parsers.DigestsParser',
+    )
 }
 
 
@@ -89,5 +93,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+DIGEST_CONTENT_TYPE = 'application/vnd.elife.digest+json;version=1'
 DIGESTS_CONTENT_TYPE = 'application/vnd.elife.digest-list+json;version=1'
 ERROR_CONTENT_TYPE = 'application/problem+json'

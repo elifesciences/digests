@@ -28,7 +28,8 @@ class DigestViewSet(viewsets.ModelViewSet):
     serializer_class = DigestSerializer
     pagination_class = DigestPagination
 
-    content_type = settings.DIGESTS_CONTENT_TYPE
+    content_type = settings.DIGEST_CONTENT_TYPE
+    list_content_type = settings.DIGESTS_CONTENT_TYPE
     schema_name = 'digest.v1.json'
 
     def _create_response(self, data: Dict[str, Any]) -> Response:
@@ -55,9 +56,9 @@ class DigestViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
-        return self._create_response(serializer.data)
+        return Response(serializer.data, content_type=self.list_content_type)
 
     def retrieve(self, request: Request, *args, **kwargs) -> Response:
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        return self._create_response(serializer.data)
+        return Response(serializer.data, content_type=self.content_type)
