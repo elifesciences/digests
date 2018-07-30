@@ -26,7 +26,7 @@ class Digest(models.Model):
     updated = models.DateTimeField(null=True)
 
     class Meta:
-        ordering = ('published',)
+        ordering = ('stage', '-published',)
 
     def __str__(self):
         return f'{self.id}: {self.title}'
