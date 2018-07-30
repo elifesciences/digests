@@ -14,7 +14,7 @@ DIGESTS_URL = '/digests'
 
 @pytest.mark.django_db
 def test_can_get_digest(client: Client):
-    response = client.get(DIGESTS_URL)
+    response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
     assert response.status_code == 200
 
 
@@ -25,7 +25,7 @@ def test_has_expected_data_in_response(client: Client,
                                        digest_content_json: List[Dict],
                                        digest_related_content_json: List[Dict],
                                        digest_subjects_json: List[Dict]):
-    response = client.get(DIGESTS_URL)
+    response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
     data = response.data['items'][0]
     assert response.data['total'] == 1
     assert len(response.data['items']) == 1
@@ -43,14 +43,14 @@ def test_has_expected_data_in_response(client: Client,
 def test_can_get_digest_by_id(client: Client,
                               digest: Digest,
                               digest_json: Dict):
-    response = client.get(f'{DIGESTS_URL}/{digest.id}')
+    response = client.get(f'{DIGESTS_URL}/{digest.id}', **{'ACCEPT': settings.DIGEST_CONTENT_TYPE})
     assert response.data == digest_json
     assert response.content_type == settings.DIGEST_CONTENT_TYPE
 
 
 @pytest.mark.django_db
-def test_has_digest_content_type_header(client: Client):
-    response = client.get(DIGESTS_URL)
+def test_has_digests_content_type_header(client: Client):
+    response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
     assert response.status_code == 200
     assert response.content_type == settings.DIGESTS_CONTENT_TYPE
 
