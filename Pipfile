@@ -8,7 +8,7 @@ name = "pypi"
 [packages]
 
 django = "*"
-elife_api_validator = {git = "https://github.com/elifesciences/api-validator-python.git", ref = "ab423bd643bef91789b6cbe284bca4b04341a28b"}
+elife_api_validator = {git = "https://github.com/elifesciences/api-validator-python.git", ref = "508c2684f39a424762c4168877d011c15c8c1dc8"}
 uwsgi = "*"
 dj-database-url = "*"
 "psycopg2" = "*"

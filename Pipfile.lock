@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "065b3aa1c89b4b716533593df9c85aae10d284120694830dca65203aba61fd05"
+            "sha256": "65bf2d45faf5b7347f158812ce6d2ef85e7f60bd2bdc2e01bc3a6b067e83a9a8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -39,7 +39,7 @@
         },
         "elife-api-validator": {
             "git": "https://github.com/elifesciences/api-validator-python.git",
-            "ref": "ab423bd643bef91789b6cbe284bca4b04341a28b"
+            "ref": "508c2684f39a424762c4168877d011c15c8c1dc8"
         },
         "jsonschema": {
             "hashes": [
