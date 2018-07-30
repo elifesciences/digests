@@ -20,9 +20,10 @@ def generate_error_string(message: str, path: List[str]) -> str:
 
 
 def validation_error_handler(exception: Exception) -> Response:
-    LOGGER.exception(exception)
+    err_msg = generate_error_string(message=exception.message, path=exception.path)
+    LOGGER.exception(err_msg)
     return Response(
-        {'title': generate_error_string(message=exception.message, path=exception.path)},
+        {'title': err_msg},
         status=exception.code,
         content_type=settings.ERROR_CONTENT_TYPE
     )
