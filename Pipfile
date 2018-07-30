@@ -1,20 +1,29 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
+
 [packages]
+
 django = "*"
+elife_api_validator = {git = "https://github.com/elifesciences/api-validator-python.git", ref = "508c2684f39a424762c4168877d011c15c8c1dc8"}
 uwsgi = "*"
 dj-database-url = "*"
 "psycopg2" = "*"
 djangorestframework = "*"
 uwsgi-tools = "*"
+jsonschema = "*"
+
 
 [requires]
+
 python_version = "3.6"
 
+
 [dev-packages]
+
 pytest = "~=3.5.1"
 pytest-django = "~=3.2.1"
 proofreader = "~=0.0.8"

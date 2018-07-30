@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import pytest
 
-from digests.models import Digest
+from digests.models import Digest, PUBLISHED
 
 
 @pytest.mark.django_db
@@ -20,5 +20,13 @@ def test_can_create_digest(digest: Digest,
     assert digest.content == digest_content_json
     assert digest.image == digest_image_json
     assert digest.relatedContent == digest_related_content_json
+    assert digest.stage == 'preview'
     assert digest.subjects == digest_subjects_json
     assert digest.impactStatement == digest_json['impactStatement']
+
+
+@pytest.mark.django_db
+def test_can_set_stage_to_published(digest: Digest):
+    digest.stage = PUBLISHED
+    digest.save()
+    assert digest.stage == PUBLISHED

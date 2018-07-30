@@ -1,8 +1,15 @@
 from typing import Dict, List
 
 import pytest
+from rest_framework.test import APIClient
 
 from digests.models import Digest
+
+
+@pytest.fixture
+@pytest.mark.django_db
+def rest_client() -> APIClient:
+    return APIClient()
 
 
 @pytest.fixture
@@ -163,6 +170,7 @@ def digest_json(digest_image_json: Dict,
         "title": "Neighborhood watch",
         "impactStatement": "Roundworms modify the chemical signals they produce to"
                            " tell others whether they’re in a good or bad environment.",
+        "stage": "preview",
         "published": "2018-07-06T09:06:01Z",
         "updated": "2018-07-06T16:23:24Z",
         "image": digest_image_json,

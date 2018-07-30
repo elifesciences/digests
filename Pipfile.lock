@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e46aa0fbf4dfd7980fbad254d356f8c55ac3f9ed74b6618393f045ee128c457c"
+            "sha256": "65bf2d45faf5b7347f158812ce6d2ef85e7f60bd2bdc2e01bc3a6b067e83a9a8"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -36,6 +36,17 @@
                 "sha256:c375e4f95a3a64fccac412e36fb42ba36881e52313ec021ef410b40f67cddca4"
             ],
             "version": "==3.8.2"
+        },
+        "elife-api-validator": {
+            "git": "https://github.com/elifesciences/api-validator-python.git",
+            "ref": "508c2684f39a424762c4168877d011c15c8c1dc8"
+        },
+        "jsonschema": {
+            "hashes": [
+                "sha256:000e68abd33c972a5248544925a0cae7d1125f9bf6c58280d37546b946769a08",
+                "sha256:6ff5f3180870836cae40f06fa10419f557208175f13ad7bc26caa77beb1f6e02"
+            ],
+            "version": "==2.6.0"
         },
         "psycopg2": {
             "hashes": [

@@ -11,6 +11,7 @@ class DigestSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'impactStatement',
+            'stage',
             'published',
             'updated',
             'image',
