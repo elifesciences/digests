@@ -43,7 +43,7 @@ def test_wont_update_digest_id_via_patch(digest: Digest,
                                  data=json.dumps({'id': new_id}),
                                  content_type=settings.DIGEST_CONTENT_TYPE)
     assert response.status_code == 200
-    assert response.data['id'] != new_id
+    assert response.data['id'] == digest.id
 
 
 @pytest.mark.django_db
