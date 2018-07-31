@@ -14,7 +14,7 @@ DIGEST_STAGES = (
 
 
 class Digest(models.Model):
-    id = models.CharField(primary_key=True, max_length=255)
+    id = models.CharField(primary_key=True, max_length=255, editable=False)
     content = JSONField()
     image = JSONField()
     impactStatement = models.TextField(blank=True, null=True)
