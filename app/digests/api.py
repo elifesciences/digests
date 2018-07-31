@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from digests.exceptions import validation_error_handler
 from digests.models import Digest
 from digests.pagination import DigestPagination
-from digests.serializers import DigestSerializer
+from digests.serializers import CreateDigestSerializer, DigestSerializer
 from digests.utils import get_schema, get_schema_name
 
 
@@ -38,7 +38,7 @@ class DigestViewSet(viewsets.ModelViewSet):
             self._validate_against_schema(request, data=request.data)
 
             # validating the actual table fields as using the rules defined in the `Digest` model
-            serializer = self.get_serializer(data=request.data)
+            serializer = CreateDigestSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
 
