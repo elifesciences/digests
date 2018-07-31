@@ -1,3 +1,4 @@
+from collections import ChainMap
 from typing import Any, Dict
 
 from django.conf import settings
@@ -27,12 +28,14 @@ class DigestViewSet(viewsets.ModelViewSet):
     def _create_response(self, data: Dict[str, Any]) -> Response:
         return Response(data, content_type=self.content_type)
 
+    @staticmethod
+    def _validate_against_schema(request: Request, data: Dict) -> None:
+        schema = get_schema(get_schema_name(request.content_type))
+        validate_json(data, schema=schema)
+
     def create(self, request: Request, *args, **kwargs) -> Response:
         try:
-            schema = get_schema(get_schema_name(request.content_type))
-
-            # validating entire `json` against the externally defined schema
-            validate_json(request.data, schema=schema)
+            self._validate_against_schema(request, data=request.data)
 
             # validating the actual table fields as using the rules defined in the `Digest` model
             serializer = self.get_serializer(data=request.data)
@@ -62,3 +65,24 @@ class DigestViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data, content_type=self.content_type)
+
+    def update(self, request, *args, **kwargs):
+        try:
+            partial = kwargs.pop('partial', False)
+            instance = self.get_object()
+
+            if partial:
+                existing_instance = self.get_serializer(instance)
+
+                self._validate_against_schema(request, data=dict(ChainMap(request.data, existing_instance.data)))
+
+            # validating the actual table fields as using the rules defined in the `Digest` model
+            serializer = self.get_serializer(instance, data=request.data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            return Response(serializer.data)
+
+        except ValidationError as err:
+            err.code = status.HTTP_400_BAD_REQUEST
+            return validation_error_handler(err)
