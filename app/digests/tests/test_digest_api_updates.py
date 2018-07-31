@@ -28,6 +28,7 @@ def test_can_update_digest_via_patch(key: str,
                                  data=json.dumps({key: value}),
                                  content_type=settings.DIGEST_CONTENT_TYPE)
     assert response.status_code == 200
+    assert response.data['id'] == '2'
     assert response.data[key] == value
     assert response.data['updated'] == '2018-01-01T00:00:00Z'
 
