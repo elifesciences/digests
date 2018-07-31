@@ -25,5 +25,8 @@ class Digest(models.Model):
     title = models.CharField(max_length=255)
     updated = models.DateTimeField(null=True)
 
+    class Meta:
+        ordering = ('-published',)
+
     def __str__(self):
         return f'{self.id}: {self.title}'

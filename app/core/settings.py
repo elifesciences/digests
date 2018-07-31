@@ -75,8 +75,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_PARSER_CLASSES': (
+        'digests.parsers.DigestParser',
         'rest_framework.parsers.JSONParser',
-        'digests.parsers.DigestsParser',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'digests.renderers.DigestRenderer',
+        'digests.renderers.DigestsRenderer',
+        'rest_framework.renderers.JSONRenderer',
     )
 }
 
