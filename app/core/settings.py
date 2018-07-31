@@ -82,7 +82,8 @@ REST_FRAMEWORK = {
         'digests.renderers.DigestRenderer',
         'digests.renderers.DigestsRenderer',
         'rest_framework.renderers.JSONRenderer',
-    )
+    ),
+    'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%SZ",
 }
 
 
