@@ -76,7 +76,7 @@ def test_is_ordered_by_descending_published_date(client: Client, digest: Digest,
 
     response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
     assert response.status_code == 200
-
+    assert len(response.data['items']) == 2
     # check most recently published digest is first
     assert response.data['items'][0]['id'] == '10'
     assert response.data['items'][0]['published'] == new_pub_date
