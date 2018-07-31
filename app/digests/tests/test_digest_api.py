@@ -1,3 +1,4 @@
+import copy
 import json
 from typing import Dict, List
 
@@ -60,3 +61,23 @@ def test_can_ingest_digest(rest_client: APIClient, digest_json: Dict):
     response = rest_client.post(DIGESTS_URL, data=json.dumps(digest_json),
                                 content_type=settings.DIGEST_CONTENT_TYPE)
     assert response.status_code == 201
+
+
+@pytest.mark.django_db
+def test_is_ordered_by_descending_published_date(client: Client, digest: Digest, digest_json: Dict):
+    # add second digest with newer published date
+    digest_data = copy.deepcopy(digest_json)
+    new_pub_date = "2018-10-07T00:00:00Z"
+    digest_data['id'] = '10'
+    digest_data['published'] = new_pub_date
+
+    new_digest = Digest.objects.create(**digest_data)
+    new_digest.save()
+
+    response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
+    assert response.status_code == 200
+
+    # check most recently published digest is first
+    assert response.data['items'][0]['id'] == '10'
+    assert response.data['items'][0]['published'] == new_pub_date
+
