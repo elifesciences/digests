@@ -72,9 +72,14 @@ class DigestViewSet(viewsets.ModelViewSet):
             instance = self.get_object()
 
             if partial:
+                # validatation for `PATCH` request
                 existing_instance = self.get_serializer(instance)
+                new_data = dict(ChainMap(request.data, existing_instance.data))
+            else:
+                # validation for `PUT` request
+                new_data = request.data
 
-                self._validate_against_schema(request, data=dict(ChainMap(request.data, existing_instance.data)))
+            self._validate_against_schema(request, data=new_data)
 
             # validating the actual table fields as using the rules defined in the `Digest` model
             serializer = self.get_serializer(instance, data=request.data, partial=partial)
