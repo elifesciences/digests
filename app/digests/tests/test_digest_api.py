@@ -9,7 +9,6 @@ from rest_framework.test import APIClient
 
 from digests.models import Digest
 
-
 DIGESTS_URL = '/digests'
 
 
@@ -82,3 +81,15 @@ def test_is_ordered_by_descending_published_date(client: Client, digest: Digest,
     assert response.data['items'][0]['id'] == '10'
     assert response.data['items'][0]['published'] == new_pub_date
 
+
+@pytest.mark.parametrize('stage', [
+    'preview',
+    'published',
+])
+@pytest.mark.django_db
+def test_can_filter_on_digest_stage(stage: str, client: Client,
+                                    digest: Digest, published_digest: Digest):
+    response = client.get(f'{DIGESTS_URL}?stage={stage}', **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
+    assert response.status_code == 200
+    assert response.data['total'] == 1
+    assert response.data['items'][0]['stage'] == stage

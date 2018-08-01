@@ -24,6 +24,19 @@ def digest(digest_json: Dict) -> Digest:
                                  title=digest_json['title'])
 
 
+@pytest.fixture
+def published_digest(digest_json: Dict) -> Digest:
+    return Digest.objects.create(id='3',
+                                 content=digest_json['content'],
+                                 image=digest_json['image'],
+                                 impactStatement=digest_json['impactStatement'],
+                                 published=digest_json['published'],
+                                 relatedContent=digest_json['relatedContent'],
+                                 stage='published',
+                                 subjects=digest_json['subjects'],
+                                 title=digest_json['title'])
+
+
 @pytest.fixture(scope='session')
 def digest_content_json() -> List[Dict]:
     return [
