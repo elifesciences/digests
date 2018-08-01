@@ -21,8 +21,7 @@ def digest(digest_json: Dict) -> Digest:
                                  published=digest_json['published'],
                                  relatedContent=digest_json['relatedContent'],
                                  subjects=digest_json['subjects'],
-                                 title=digest_json['title'],
-                                 updated=digest_json['updated'])
+                                 title=digest_json['title'])
 
 
 @pytest.fixture(scope='session')
@@ -172,7 +171,6 @@ def digest_json(digest_image_json: Dict,
                            " tell others whether they’re in a good or bad environment.",
         "stage": "preview",
         "published": "2018-07-06T09:06:01Z",
-        "updated": "2018-07-06T16:23:24Z",
         "image": digest_image_json,
         "subjects": digest_subjects_json,
         "content": digest_content_json,

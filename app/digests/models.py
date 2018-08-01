@@ -23,7 +23,7 @@ class Digest(models.Model):
     stage = models.CharField(max_length=25, choices=DIGEST_STAGES, default=PREVIEW)
     subjects = JSONField(null=True)
     title = models.CharField(max_length=255)
-    updated = models.DateTimeField(null=True)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     class Meta:
         ordering = ('-published',)

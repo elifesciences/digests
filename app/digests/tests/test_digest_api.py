@@ -20,6 +20,7 @@ def test_can_get_digest(client: Client):
 
 
 @pytest.mark.django_db
+@pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_has_expected_data_in_response(client: Client,
                                        digest: Digest,
                                        digest_image_json: Dict,
@@ -33,7 +34,7 @@ def test_has_expected_data_in_response(client: Client,
     assert data['id'] == '2'
     assert data['title'] == 'Neighborhood watch'
     assert data['published'] == "2018-07-06T09:06:01Z"
-    assert data['updated'] == "2018-07-06T16:23:24Z"
+    assert data['updated'] == "2018-01-01T00:00:00Z"
     assert data['image'] == digest_image_json
     assert data['subjects'] == digest_subjects_json
     assert data['content'] == digest_content_json
@@ -45,7 +46,7 @@ def test_can_get_digest_by_id(client: Client,
                               digest: Digest,
                               digest_json: Dict):
     response = client.get(f'{DIGESTS_URL}/{digest.id}', **{'ACCEPT': settings.DIGEST_CONTENT_TYPE})
-    assert response.data == digest_json
+    assert response.data['id'] == digest_json['id']
     assert response.content_type == settings.DIGEST_CONTENT_TYPE
 
 
