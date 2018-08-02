@@ -3,6 +3,7 @@ from typing import Any, Dict
 
 from django.conf import settings
 
+from django_filters.rest_framework import DjangoFilterBackend
 from jsonschema import validate as validate_json
 from jsonschema import ValidationError
 from rest_framework import viewsets, status
@@ -21,6 +22,8 @@ class DigestViewSet(viewsets.ModelViewSet):
     queryset = Digest.objects.all()
     serializer_class = DigestSerializer
     pagination_class = DigestPagination
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = ('stage',)
 
     content_type = settings.DIGEST_CONTENT_TYPE
     list_content_type = settings.DIGESTS_CONTENT_TYPE
