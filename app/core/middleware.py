@@ -18,7 +18,8 @@ def _set_authenticated(request: HttpRequest, state: bool) -> HttpRequest:
     return request
 
 
-def kong_authentication(get_response: Callable[[HttpRequest], HttpResponse]) -> Callable[[HttpRequest], HttpResponse]:
+def kong_authentication(get_response: Callable[[HttpRequest], HttpResponse]) \
+        -> Callable[[HttpRequest], HttpResponse]:
     def middleware(request: HttpRequest):
         authenticated = False
         can_modify = False
