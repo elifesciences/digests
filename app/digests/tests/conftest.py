@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+from django.conf import settings
 import pytest
 from rest_framework.test import APIClient
 
@@ -10,6 +11,16 @@ from digests.models import Digest
 @pytest.mark.django_db
 def rest_client() -> APIClient:
     return APIClient()
+
+
+@pytest.fixture
+def auth_header():
+    return {settings.CONSUMER_GROUPS_HEADER: 'view-unpublished-content'}
+
+
+@pytest.fixture
+def can_edit_headers():
+    return {settings.CONSUMER_GROUPS_HEADER: 'view-unpublished-content, edit-digests'}
 
 
 @pytest.fixture

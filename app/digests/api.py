@@ -10,7 +10,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from digests.exceptions import validation_error_handler
-from digests.models import Digest
+from digests.models import Digest, PUBLISHED
 from digests.pagination import DigestPagination
 from digests.serializers import CreateDigestSerializer, DigestSerializer
 from digests.utils import get_schema, get_schema_name
@@ -25,15 +25,30 @@ class DigestViewSet(viewsets.ModelViewSet):
     content_type = settings.DIGEST_CONTENT_TYPE
     list_content_type = settings.DIGESTS_CONTENT_TYPE
 
+    def _can_modify(self) -> bool:
+        return self.request.META.get(settings.KONG_MODIFICATION_HEADER, False)
+
     def _create_response(self, data: Dict[str, Any]) -> Response:
         return Response(data, content_type=self.content_type)
+
+    def _is_authenticated(self) -> bool:
+        return self.request.META.get(settings.KONG_AUTH_HEADER, False)
 
     @staticmethod
     def _validate_against_schema(request: Request, data: Dict) -> None:
         schema = get_schema(get_schema_name(request.content_type))
         validate_json(data, schema=schema)
 
+    def get_queryset(self):
+        if self._is_authenticated():
+            return Digest.objects.all()
+        else:
+            return Digest.objects.filter(stage=PUBLISHED)
+
     def create(self, request: Request, *args, **kwargs) -> Response:
+        if not self._can_modify() or not self._is_authenticated():
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         try:
             self._validate_against_schema(request, data=request.data)
 
@@ -67,6 +82,9 @@ class DigestViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, content_type=self.content_type)
 
     def update(self, request, *args, **kwargs):
+        if not self._can_modify() or not self._is_authenticated():
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
         try:
             partial = kwargs.pop('partial', False)
             instance = self.get_object()
