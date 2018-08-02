@@ -15,6 +15,7 @@ dj-database-url = "*"
 djangorestframework = "*"
 uwsgi-tools = "*"
 jsonschema = "*"
+django-filter = "*"
 
 
 [requires]
