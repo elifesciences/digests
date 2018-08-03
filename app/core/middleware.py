@@ -2,25 +2,25 @@ from logging import getLogger
 from typing import Callable
 
 from django.conf import settings
-from django.http.request import HttpRequest
-from django.http.response import HttpResponse
+from django.http.request import HttpRequest as Request
+from django.http.response import HttpResponse as Response
 
 LOGGER = getLogger(__name__)
 
 
-def _set_can_modify(request: HttpRequest, state: bool) -> HttpRequest:
+def _set_can_modify(request: Request, state: bool) -> Request:
     request.META[settings.AUTHORIZATION_MODIFICATION_HEADER] = state
     return request
 
 
-def _set_can_preview(request: HttpRequest, state: bool) -> HttpRequest:
+def _set_can_preview(request: Request, state: bool) -> Request:
     request.META[settings.AUTHORIZATION_PREVIEW_HEADER] = state
     return request
 
 
-def kong_authentication(get_response: Callable[[HttpRequest], HttpResponse]) \
-        -> Callable[[HttpRequest], HttpResponse]:
-    def middleware(request: HttpRequest):
+def kong_authentication(get_response: Callable[[Request], Response]) \
+        -> Callable[[Request], Response]:
+    def middleware(request: Request):
         can_preview = False
         can_modify = False
 
