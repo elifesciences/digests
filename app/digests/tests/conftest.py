@@ -14,7 +14,7 @@ def rest_client() -> APIClient:
 
 
 @pytest.fixture
-def auth_header():
+def can_preview_header():
     return {settings.CONSUMER_GROUPS_HEADER: 'view-unpublished-content'}
 
 
