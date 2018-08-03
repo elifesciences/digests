@@ -9,7 +9,9 @@ WORKDIR ${PROJECT_FOLDER}
 
 USER root
 RUN mkdir /var/www build && \
-    chown www-data:www-data /var/www build
+    chown www-data:www-data /var/www build && \
+    mkdir -p var/logs && \
+    chown www-data:www-data var/logs
 
 COPY --from=venv ${PROJECT_FOLDER}/venv/ venv/
 COPY project_tests.sh Pipfile Pipfile.lock ./
