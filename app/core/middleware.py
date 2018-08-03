@@ -33,7 +33,8 @@ def kong_authentication(get_response: Callable[[Request], Response]) \
             if 'view-unpublished-content' in groups:
                 can_preview = True
             else:
-                LOGGER.debug('setting request as user cannot view unpublished content/cannot preview')
+                LOGGER.debug('setting request as user cannot view '
+                             'unpublished content/cannot preview')
 
             if 'edit-digests' in groups:
                 can_modify = True
