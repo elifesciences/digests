@@ -9,12 +9,12 @@ LOGGER = getLogger(__name__)
 
 
 def _set_can_modify(request: HttpRequest, state: bool) -> HttpRequest:
-    request.META[settings.KONG_MODIFICATION_HEADER] = state
+    request.META[settings.AUTHORIZATION_MODIFICATION_HEADER] = state
     return request
 
 
 def _set_can_preview(request: HttpRequest, state: bool) -> HttpRequest:
-    request.META[settings.KONG_AUTH_HEADER] = state
+    request.META[settings.AUTHORIZATION_PREVIEW_HEADER] = state
     return request
 
 

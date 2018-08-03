@@ -29,13 +29,13 @@ class DigestViewSet(viewsets.ModelViewSet):
     list_content_type = settings.DIGESTS_CONTENT_TYPE
 
     def _can_modify(self) -> bool:
-        return self.request.META.get(settings.KONG_MODIFICATION_HEADER, False)
+        return self.request.META.get(settings.AUTHORIZATION_MODIFICATION_HEADER, False)
 
     def _create_response(self, data: Dict[str, Any]) -> Response:
         return Response(data, content_type=self.content_type)
 
     def _can_preview(self) -> bool:
-        return self.request.META.get(settings.KONG_AUTH_HEADER, False)
+        return self.request.META.get(settings.AUTHORIZATION_PREVIEW_HEADER, False)
 
     @staticmethod
     def _validate_against_schema(request: Request, data: Dict) -> None:
