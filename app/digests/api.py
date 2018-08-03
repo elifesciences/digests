@@ -34,7 +34,7 @@ class DigestViewSet(viewsets.ModelViewSet):
     def _create_response(self, data: Dict[str, Any]) -> Response:
         return Response(data, content_type=self.content_type)
 
-    def _is_authenticated(self) -> bool:
+    def _can_preview(self) -> bool:
         return self.request.META.get(settings.KONG_AUTH_HEADER, False)
 
     @staticmethod
@@ -43,13 +43,13 @@ class DigestViewSet(viewsets.ModelViewSet):
         validate_json(data, schema=schema)
 
     def get_queryset(self):
-        if self._is_authenticated():
+        if self._can_preview():
             return Digest.objects.all()
         else:
             return Digest.objects.filter(stage=PUBLISHED)
 
     def create(self, request: Request, *args, **kwargs) -> Response:
-        if not self._can_modify() or not self._is_authenticated():
+        if not self._can_modify() or not self._can_preview():
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         try:
@@ -85,7 +85,7 @@ class DigestViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, content_type=self.content_type)
 
     def update(self, request, *args, **kwargs):
-        if not self._can_modify() or not self._is_authenticated():
+        if not self._can_modify() or not self._can_preview():
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         try:

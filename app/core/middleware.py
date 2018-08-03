@@ -21,7 +21,7 @@ def _set_authenticated(request: HttpRequest, state: bool) -> HttpRequest:
 def kong_authentication(get_response: Callable[[HttpRequest], HttpResponse]) \
         -> Callable[[HttpRequest], HttpResponse]:
     def middleware(request: HttpRequest):
-        authenticated = False
+        can_preview = False
         can_modify = False
 
         groups_header = request.META.get(settings.CONSUMER_GROUPS_HEADER, None)
@@ -31,16 +31,16 @@ def kong_authentication(get_response: Callable[[HttpRequest], HttpResponse]) \
 
             LOGGER.debug('user groups: %s', groups)
             if 'view-unpublished-content' in groups:
-                authenticated = True
+                can_preview = True
             else:
-                LOGGER.debug('setting request as not authenticated')
+                LOGGER.debug('setting request as user cannot view unpublished content/cannot preview')
 
             if 'edit-digests' in groups:
                 can_modify = True
             else:
                 LOGGER.debug('setting request as user cannot modify digests')
 
-        request = _set_authenticated(_set_can_modify(request, can_modify), authenticated)
+        request = _set_authenticated(_set_can_modify(request, can_modify), can_preview)
 
         return get_response(request)
 
