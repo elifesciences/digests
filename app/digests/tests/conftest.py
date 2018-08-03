@@ -24,7 +24,7 @@ def can_edit_headers():
 
 
 @pytest.fixture
-def digest(digest_json: Dict) -> Digest:
+def preview_digest(digest_json: Dict) -> Digest:
     return Digest.objects.create(id=digest_json['id'],
                                  content=digest_json['content'],
                                  image=digest_json['image'],

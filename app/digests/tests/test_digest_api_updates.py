@@ -22,10 +22,10 @@ DIGESTS_URL = '/digests'
 def test_can_update_digest_via_patch(key: str,
                                      value: str,
                                      can_edit_headers: Dict,
-                                     digest: Digest,
+                                     preview_digest: Digest,
                                      digest_json: Dict,
                                      rest_client: APIClient):
-    response = rest_client.patch(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.patch(f'{DIGESTS_URL}/{preview_digest.id}',
                                  data=json.dumps({key: value}),
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
@@ -38,28 +38,28 @@ def test_can_update_digest_via_patch(key: str,
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_wont_update_digest_id_via_patch(can_edit_headers: Dict,
-                                         digest: Digest,
+                                         preview_digest: Digest,
                                          digest_json: Dict,
                                          rest_client: APIClient):
     new_id = '123456'
-    response = rest_client.patch(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.patch(f'{DIGESTS_URL}/{preview_digest.id}',
                                  data=json.dumps({'id': new_id}),
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
     assert response.status_code == 200
-    assert response.data['id'] == digest.id
+    assert response.data['id'] == preview_digest.id
 
 
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_can_update_digest_content_via_patch(can_edit_headers: Dict,
-                                             digest: Digest,
+                                             preview_digest: Digest,
                                              digest_content_json: Dict,
                                              rest_client: APIClient):
     new_content = deepcopy(digest_content_json)
     new_text = 'foo'
     new_content[0]['text'] = new_text
-    response = rest_client.patch(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.patch(f'{DIGESTS_URL}/{preview_digest.id}',
                                  data=json.dumps({'content': new_content}),
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
@@ -70,13 +70,13 @@ def test_can_update_digest_content_via_patch(can_edit_headers: Dict,
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_can_update_digest_related_content_via_patch(can_edit_headers: Dict,
-                                                     digest: Digest,
+                                                     preview_digest: Digest,
                                                      digest_related_content_json: Dict,
                                                      rest_client: APIClient):
     new_content = deepcopy(digest_related_content_json)
     new_text = 'foo'
     new_content[0]['title'] = new_text
-    response = rest_client.patch(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.patch(f'{DIGESTS_URL}/{preview_digest.id}',
                                  data=json.dumps({'relatedContent': new_content}),
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
@@ -87,13 +87,13 @@ def test_can_update_digest_related_content_via_patch(can_edit_headers: Dict,
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_can_update_digest_subjects_via_patch(can_edit_headers: Dict,
-                                              digest: Digest,
+                                              preview_digest: Digest,
                                               digest_subjects_json: Dict,
                                               rest_client: APIClient):
     new_subjects = deepcopy(digest_subjects_json)
     new_name = 'foo'
     new_subjects[0]['name'] = new_name
-    response = rest_client.patch(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.patch(f'{DIGESTS_URL}/{preview_digest.id}',
                                  data=json.dumps({'subjects': new_subjects}),
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
@@ -104,13 +104,13 @@ def test_can_update_digest_subjects_via_patch(can_edit_headers: Dict,
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_can_update_digest_image_via_patch(can_edit_headers: Dict,
-                                           digest: Digest,
+                                           preview_digest: Digest,
                                            digest_image_json: Dict,
                                            rest_client: APIClient):
     new_image = deepcopy(digest_image_json)
     new_alt = 'some alt'
     new_image['thumbnail']['alt'] = new_alt
-    response = rest_client.patch(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.patch(f'{DIGESTS_URL}/{preview_digest.id}',
                                  data=json.dumps({'image': new_image}),
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
@@ -129,10 +129,10 @@ def test_can_update_digest_image_via_patch(can_edit_headers: Dict,
 def test_will_reject_invalid_json_field_updates(key: str,
                                                 value: str,
                                                 can_edit_headers: Dict,
-                                                digest: Digest,
+                                                preview_digest: Digest,
                                                 digest_json: Dict,
                                                 rest_client: APIClient):
-    response = rest_client.patch(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.patch(f'{DIGESTS_URL}/{preview_digest.id}',
                                  data=json.dumps({key: value}),
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
@@ -142,14 +142,14 @@ def test_will_reject_invalid_json_field_updates(key: str,
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_can_update_digest_via_put(can_edit_headers: Dict,
-                                   digest: Digest,
+                                   preview_digest: Digest,
                                    digest_json: Dict,
                                    rest_client: APIClient):
     new_data = deepcopy(digest_json)
     new_data['title'] = 'New Title'
     new_data['stage'] = 'published'
 
-    response = rest_client.put(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.put(f'{DIGESTS_URL}/{preview_digest.id}',
                                data=json.dumps(new_data),
                                content_type=settings.DIGEST_CONTENT_TYPE,
                                **can_edit_headers)
@@ -162,14 +162,14 @@ def test_can_update_digest_via_put(can_edit_headers: Dict,
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_reject_invalid_data_via_put(can_edit_headers: Dict,
-                                     digest: Digest,
+                                     preview_digest: Digest,
                                      digest_json: Dict,
                                      rest_client: APIClient):
     new_data = deepcopy(digest_json)
     new_data['content'] = {}
     new_data['image'] = {}
 
-    response = rest_client.put(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.put(f'{DIGESTS_URL}/{preview_digest.id}',
                                data=json.dumps(new_data),
                                content_type=settings.DIGEST_CONTENT_TYPE,
                                **can_edit_headers)
@@ -177,20 +177,20 @@ def test_reject_invalid_data_via_put(can_edit_headers: Dict,
 
 
 @pytest.mark.django_db
-def test_will_fail_to_patch_digest_without_auth_headers(digest: Digest,
+def test_will_fail_to_patch_digest_without_auth_headers(preview_digest: Digest,
                                                         digest_json: Dict,
                                                         rest_client: APIClient):
-    response = rest_client.patch(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.patch(f'{DIGESTS_URL}/{preview_digest.id}',
                                  data=json.dumps(digest_json),
                                  content_type=settings.DIGEST_CONTENT_TYPE)
     assert response.status_code == 403
 
 
 @pytest.mark.django_db
-def test_will_fail_to_put_digest_without_auth_headers(digest: Digest,
+def test_will_fail_to_put_digest_without_auth_headers(preview_digest: Digest,
                                                       digest_json: Dict,
                                                       rest_client: APIClient):
-    response = rest_client.put(f'{DIGESTS_URL}/{digest.id}',
+    response = rest_client.put(f'{DIGESTS_URL}/{preview_digest.id}',
                                data=json.dumps(digest_json),
                                content_type=settings.DIGEST_CONTENT_TYPE)
     assert response.status_code == 403

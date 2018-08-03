@@ -7,12 +7,13 @@ from digests.models import Digest, PUBLISHED
 
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
-def test_can_create_digest(digest: Digest,
+def test_can_create_digest(preview_digest: Digest,
                            digest_json: Dict,
                            digest_image_json: Dict,
                            digest_content_json: List[Dict],
                            digest_related_content_json: List[Dict],
                            digest_subjects_json: List[Dict]):
+    digest = preview_digest
     assert digest
     assert digest.id == '2'
     assert digest.title == 'Neighborhood watch'
@@ -27,7 +28,7 @@ def test_can_create_digest(digest: Digest,
 
 
 @pytest.mark.django_db
-def test_can_set_stage_to_published(digest: Digest):
-    digest.stage = PUBLISHED
-    digest.save()
-    assert digest.stage == PUBLISHED
+def test_can_set_stage_to_published(preview_digest: Digest):
+    preview_digest.stage = PUBLISHED
+    preview_digest.save()
+    assert preview_digest.stage == PUBLISHED

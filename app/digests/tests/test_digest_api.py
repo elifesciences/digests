@@ -22,7 +22,7 @@ def test_can_get_digest(client: Client):
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
 def test_has_expected_data_in_response(auth_header: Dict,
                                        client: Client,
-                                       digest: Digest,
+                                       preview_digest: Digest,
                                        digest_image_json: Dict,
                                        digest_content_json: List[Dict],
                                        digest_related_content_json: List[Dict],
@@ -45,9 +45,9 @@ def test_has_expected_data_in_response(auth_header: Dict,
 @pytest.mark.django_db
 def test_can_get_digest_by_id(auth_header: Dict,
                               client: Client,
-                              digest: Digest,
+                              preview_digest: Digest,
                               digest_json: Dict):
-    response = client.get(f'{DIGESTS_URL}/{digest.id}',
+    response = client.get(f'{DIGESTS_URL}/{preview_digest.id}',
                           **{'ACCEPT': settings.DIGEST_CONTENT_TYPE}, **auth_header)
     assert response.data['id'] == digest_json['id']
     assert response.content_type == settings.DIGEST_CONTENT_TYPE
@@ -69,7 +69,7 @@ def test_can_ingest_digest(rest_client: APIClient, digest_json: Dict, can_edit_h
 
 
 @pytest.mark.django_db
-def test_is_ordered_by_descending_published_date(client: Client, digest: Digest, digest_json: Dict):
+def test_is_ordered_by_descending_published_date(client: Client, preview_digest: Digest, digest_json: Dict):
     # add second digest with newer published date
     digest_data = copy.deepcopy(digest_json)
     new_pub_date = "2018-10-07T00:00:00Z"
@@ -96,18 +96,19 @@ def test_will_fail_to_ingest_digest_without_headers(rest_client: APIClient, dige
 
 
 @pytest.mark.django_db
-def test_only_shows_published_digests_with_no_auth_header(client: Client, digest: Digest):
+def test_only_shows_published_digests_with_no_auth_header(client: Client, preview_digest: Digest):
     response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
     assert response.status_code == 200
     assert len(response.data['items']) == 0
 
-    digest.stage = 'published'
-    digest.save()
+    preview_digest.stage = 'published'
+    preview_digest.save()
 
     response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
     assert response.status_code == 200
     assert len(response.data['items']) == 1
-    assert response.data['items'][0]['id'] == digest.id
+    assert response.data['items'][0]['id'] == preview_digest.id
+
 
 @pytest.mark.parametrize('stage', [
     'preview',
@@ -117,7 +118,7 @@ def test_only_shows_published_digests_with_no_auth_header(client: Client, digest
 def test_can_filter_on_digest_stage(stage: str, 
                                     auth_header: Dict, 
                                     client: Client,
-                                    digest: Digest, 
+                                    preview_digest: Digest,
                                     published_digest: Digest):
     response = client.get(f'{DIGESTS_URL}?stage={stage}', 
                           **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE}, **auth_header)
