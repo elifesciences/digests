@@ -1,5 +1,6 @@
 from typing import Dict, List
 
+from django.conf import settings
 import pytest
 from rest_framework.test import APIClient
 
@@ -13,7 +14,17 @@ def rest_client() -> APIClient:
 
 
 @pytest.fixture
-def digest(digest_json: Dict) -> Digest:
+def can_preview_header():
+    return {settings.CONSUMER_GROUPS_HEADER: 'view-unpublished-content'}
+
+
+@pytest.fixture
+def can_edit_headers():
+    return {settings.CONSUMER_GROUPS_HEADER: 'view-unpublished-content, edit-digests'}
+
+
+@pytest.fixture
+def preview_digest(digest_json: Dict) -> Digest:
     return Digest.objects.create(id=digest_json['id'],
                                  content=digest_json['content'],
                                  image=digest_json['image'],

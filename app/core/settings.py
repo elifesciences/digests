@@ -22,6 +22,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'core.middleware.kong_authentication',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -99,6 +100,10 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+CONSUMER_GROUPS_HEADER = 'HTTP_X_CONSUMER_GROUPS'
+AUTHORIZATION_PREVIEW_HEADER = 'Digests-Can-Preview'
+AUTHORIZATION_MODIFICATION_HEADER = 'Digests-Can-Modify'
 
 DIGEST_CONTENT_TYPE = 'application/vnd.elife.digest+json;version=1'
 DIGESTS_CONTENT_TYPE = 'application/vnd.elife.digest-list+json;version=1'
