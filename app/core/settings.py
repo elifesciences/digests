@@ -1,12 +1,15 @@
 import os
 import dj_database_url
 
+PROJECT_NAME = 'digests'
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 SECRET_KEY = os.environ.get('APP_SECRET', 'secret')
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT_NAME', 'dev')
 DEBUG = bool(os.environ.get('DEBUG', 0))
+DEFAULT_LOG_DIR = '/srv/digests/var/logs'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -88,6 +91,47 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%SZ",
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(DEFAULT_LOG_DIR, '%s.log' % PROJECT_NAME),
+            'formatter': 'verbose'
+        },
+        'console': {
+            'class': 'logging.StreamHandler'
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'DEBUG',
+        },
+        'core': {
+            'handlers': ['file'],
+            'propagate': False,
+            'level': 'DEBUG',
+        },
+        'digests': {
+            'handlers': ['file'],
+            'propagate': False,
+            'level': 'DEBUG',
+        }
+    },
+}
 
 LANGUAGE_CODE = 'en-us'
 
