@@ -13,7 +13,7 @@ def _set_can_modify(request: HttpRequest, state: bool) -> HttpRequest:
     return request
 
 
-def _set_authenticated(request: HttpRequest, state: bool) -> HttpRequest:
+def _set_can_preview(request: HttpRequest, state: bool) -> HttpRequest:
     request.META[settings.KONG_AUTH_HEADER] = state
     return request
 
@@ -40,7 +40,7 @@ def kong_authentication(get_response: Callable[[HttpRequest], HttpResponse]) \
             else:
                 LOGGER.debug('setting request as user cannot modify digests')
 
-        request = _set_authenticated(_set_can_modify(request, can_modify), can_preview)
+        request = _set_can_preview(_set_can_modify(request, can_modify), can_preview)
 
         return get_response(request)
 
