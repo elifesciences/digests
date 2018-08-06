@@ -118,7 +118,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(DEFAULT_LOG_DIR, '%s.json' % PROJECT_NAME),
+            'filename': os.path.join(DEFAULT_LOG_DIR, '%s.json.log' % PROJECT_NAME),
             'formatter': 'json'
         },
         'console': {
@@ -163,3 +163,10 @@ AUTHORIZATION_MODIFICATION_HEADER = 'Digests-Can-Modify'
 DIGEST_CONTENT_TYPE = 'application/vnd.elife.digest+json;version=1'
 DIGESTS_CONTENT_TYPE = 'application/vnd.elife.digest-list+json;version=1'
 ERROR_CONTENT_TYPE = 'application/problem+json'
+
+ELIFE_BUS = {
+    'env': ENVIRONMENT,
+    'name': os.environ.get('BUS_NAME'),
+    'region': os.environ.get('AWS_DEFAULT_REGION'),
+    'subscriber': os.environ.get('AWS_SUBSCRIBER'),
+}
