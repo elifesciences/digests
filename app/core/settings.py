@@ -1,6 +1,6 @@
 import os
 import dj_database_url
-from pythonjsonlogger import jsonlogger
+from pythonjsonlogger.jsonlogger import JsonFormatter
 
 PROJECT_NAME = 'digests'
 
@@ -11,6 +11,7 @@ SECRET_KEY = os.environ.get('APP_SECRET', 'secret')
 ENVIRONMENT = os.environ.get('ENVIRONMENT_NAME', 'dev')
 DEBUG = bool(os.environ.get('DEBUG', 0))
 DEFAULT_LOG_DIR = '/srv/digests/var/logs'
+DEFAULT_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -101,12 +102,13 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'json': {
-            '()': jsonlogger.JsonFormatter,
+            '()': JsonFormatter,
             'format': LOG_FORMAT_STR,
+            'datefmt': DEFAULT_DATE_FORMAT
         },
         'verbose': {
             'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt': "%Y-%b-%dT%H:%M:%SZ"
+            'datefmt': DEFAULT_DATE_FORMAT
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
