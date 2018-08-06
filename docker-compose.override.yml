@@ -10,7 +10,7 @@ services:
         # likely won't work well because of permission problems
         # as the container user cannot write in here
         volumes:
-            - logs:/srv/digests/var/logs
+            - ./logs:/srv/digests/var/logs
 
 volumes:
     venv:

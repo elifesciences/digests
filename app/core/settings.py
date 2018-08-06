@@ -106,7 +106,7 @@ LOGGING = {
         },
         'verbose': {
             'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt': "%d/%b/%Y %H:%M:%S"
+            'datefmt': "%Y-%b-%dT%H:%M:%SZ"
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
