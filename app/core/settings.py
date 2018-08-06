@@ -1,5 +1,6 @@
 import os
 import dj_database_url
+from pythonjsonlogger import jsonlogger
 
 PROJECT_NAME = 'digests'
 
@@ -91,10 +92,18 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%SZ",
 }
 
+LOG_ATTRS = ['asctime', 'created', 'levelname', 'message',
+             'filename', 'funcName', 'lineno', 'module', 'pathname']
+LOG_FORMAT_STR = ' '.join(['%(' + v + ')s' for v in LOG_ATTRS])
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
+        'json': {
+            '()': jsonlogger.JsonFormatter,
+            'format': LOG_FORMAT_STR,
+        },
         'verbose': {
             'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
             'datefmt': "%d/%b/%Y %H:%M:%S"
@@ -107,8 +116,8 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(DEFAULT_LOG_DIR, '%s.log' % PROJECT_NAME),
-            'formatter': 'verbose'
+            'filename': os.path.join(DEFAULT_LOG_DIR, '%s.json.log' % PROJECT_NAME),
+            'formatter': 'json'
         },
         'console': {
             'class': 'logging.StreamHandler'
