@@ -16,6 +16,7 @@ djangorestframework = "*"
 uwsgi-tools = "*"
 jsonschema = "*"
 django-filter = "*"
+python-json-logger = "*"
 
 
 [requires]

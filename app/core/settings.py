@@ -1,5 +1,8 @@
 import os
 import dj_database_url
+from pythonjsonlogger.jsonlogger import JsonFormatter
+
+PROJECT_NAME = 'digests'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
@@ -7,6 +10,8 @@ SECRET_KEY = os.environ.get('APP_SECRET', 'secret')
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT_NAME', 'dev')
 DEBUG = bool(os.environ.get('DEBUG', 0))
+DEFAULT_LOG_DIR = '/srv/digests/var/logs'
+DEFAULT_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -88,6 +93,56 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%SZ",
 }
 
+LOG_ATTRS = ['asctime', 'levelname', 'message', 'filename',
+             'funcName', 'lineno', 'module', 'pathname']
+LOG_FORMAT_STR = ' '.join(['%(' + v + ')s' for v in LOG_ATTRS])
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'json': {
+            '()': JsonFormatter,
+            'format': LOG_FORMAT_STR,
+            'datefmt': DEFAULT_DATE_FORMAT
+        },
+        'verbose': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': DEFAULT_DATE_FORMAT
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(DEFAULT_LOG_DIR, '%s.json' % PROJECT_NAME),
+            'formatter': 'json'
+        },
+        'console': {
+            'class': 'logging.StreamHandler'
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'core': {
+            'handlers': ['file'],
+            'propagate': False,
+            'level': 'DEBUG',
+        },
+        'digests': {
+            'handlers': ['file'],
+            'propagate': False,
+            'level': 'DEBUG',
+        }
+    },
+}
 
 LANGUAGE_CODE = 'en-us'
 
