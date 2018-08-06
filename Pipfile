@@ -15,6 +15,7 @@ dj-database-url = "*"
 djangorestframework = "*"
 uwsgi-tools = "*"
 jsonschema = "*"
+elife-bus-sdk = "*"
 django-filter = "*"
 python-json-logger = "*"
 
