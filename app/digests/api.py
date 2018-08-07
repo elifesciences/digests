@@ -12,13 +12,13 @@ from rest_framework import viewsets, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from digests.events import DigestEvent
 from digests.exceptions import validation_error_handler
 from digests.models import Digest, PUBLISHED
 from digests.pagination import DigestPagination
 from digests.serializers import CreateDigestSerializer, DigestSerializer
 from digests.utils import get_schema, get_schema_name
 from elife_bus_sdk import get_publisher
-from elife_bus_sdk.events import Event
 
 
 LOGGER = getLogger(__name__)
@@ -52,7 +52,7 @@ class DigestViewSet(viewsets.ModelViewSet):
             # could add a `DigestEvent` to `elife_bus_sdk`
             # to replace the `Event` here, though functionality will not change.
             LOGGER.info('_publish_event call for %s' % self.instance.id)
-            event_publisher.publish(Event(id=self.instance.id))
+            event_publisher.publish(DigestEvent(id=self.instance.id))
         except (AttributeError, RuntimeError):
             LOGGER.exception(f'Failed to publish event for digest {digest.id}')
 
