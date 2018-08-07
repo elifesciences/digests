@@ -168,5 +168,5 @@ ELIFE_BUS = {
     'env': ENVIRONMENT,
     'name': os.environ.get('BUS_NAME'),
     'region': os.environ.get('AWS_DEFAULT_REGION'),
-    'subscriber': os.environ.get('AWS_SUBSCRIBER'),
+    'subscriber': os.environ.get('BUS_SUBSCRIBER'),
 }
