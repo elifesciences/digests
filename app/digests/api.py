@@ -47,14 +47,15 @@ class DigestViewSet(viewsets.ModelViewSet):
     def _can_preview(self) -> bool:
         return self.request.META.get(settings.AUTHORIZATION_PREVIEW_HEADER, False)
 
-    def _publish_event(self) -> None:
+    @staticmethod
+    def _publish_event(instance: Digest) -> None:
         try:
             # could add a `DigestEvent` to `elife_bus_sdk`
             # to replace the `Event` here, though functionality will not change.
-            LOGGER.info('_publish_event call for %s' % self.instance.id)
-            event_publisher.publish(DigestEvent(id=self.instance.id))
+            LOGGER.info('_publish_event call for %s' % instance.id)
+            event_publisher.publish(DigestEvent(id=instance.id))
         except (AttributeError, RuntimeError):
-            LOGGER.exception(f'Failed to publish event for digest {digest.id}')
+            LOGGER.exception(f'Failed to publish event for digest {instance.id}')
 
     @staticmethod
     def _validate_against_schema(request: Request, data: Dict) -> None:
@@ -77,9 +78,9 @@ class DigestViewSet(viewsets.ModelViewSet):
                 # validating the actual table fields as using the rules defined in the `Digest` model
                 serializer = CreateDigestSerializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
-                self.instance = serializer.save()
+                instance = serializer.save()
 
-                transaction.on_commit(self._publish_event)
+                transaction.on_commit(lambda: self._publish_event(instance))
 
             headers = self.get_success_headers(serializer.data)
 
@@ -130,7 +131,7 @@ class DigestViewSet(viewsets.ModelViewSet):
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
 
-                transaction.on_commit(self._publish_event)
+                transaction.on_commit(lambda: self._publish_event(self.instance))
 
             return Response(serializer.data)
 
