@@ -165,8 +165,8 @@ DIGESTS_CONTENT_TYPE = 'application/vnd.elife.digest-list+json;version=1'
 ERROR_CONTENT_TYPE = 'application/problem+json'
 
 ELIFE_BUS = {
-    'env': ENVIRONMENT,
+    'env': os.environ.get('BUS_ENV'),
     'name': os.environ.get('BUS_NAME'),
-    'region': os.environ.get('AWS_DEFAULT_REGION'),
+    'region': os.environ.get('BUS_REGION'),
     'subscriber': os.environ.get('BUS_SUBSCRIBER'),
 }
