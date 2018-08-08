@@ -5,7 +5,6 @@ from django.conf import settings
 from django.http.request import HttpRequest as Request
 from django.http.response import HttpResponse as Response
 from django.views.decorators.cache import patch_cache_control
-from django.utils.cache import patch_vary_headers
 
 LOGGER = getLogger(__name__)
 
@@ -75,8 +74,6 @@ def downstream_caching(get_response: Callable[[Request], Response]) \
                 cache_headers = public_headers
 
             patch_cache_control(response, **cache_headers)
-
-        patch_vary_headers(response, ['Accept', 'Accept-Encoding'])
 
         return response
 
