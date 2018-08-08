@@ -113,11 +113,11 @@ class DigestViewSet(viewsets.ModelViewSet):
             partial = kwargs.pop('partial', False)
 
             with transaction.atomic():
-                self.instance = self.get_object()
+                instance = self.get_object()
 
                 if partial:
                     # validatation for `PATCH` request
-                    existing_instance = self.get_serializer(self.instance)
+                    existing_instance = self.get_serializer(instance)
                     new_data = dict(ChainMap(request.data, existing_instance.data))
                 else:
                     # validation for `PUT` request
@@ -126,11 +126,11 @@ class DigestViewSet(viewsets.ModelViewSet):
                 self._validate_against_schema(request, data=new_data)
 
                 # validating the actual table fields as using the rules defined in the `Digest` model
-                serializer = self.get_serializer(self.instance, data=request.data, partial=partial)
+                serializer = self.get_serializer(instance, data=request.data, partial=partial)
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
 
-                transaction.on_commit(lambda: self._publish_event(self.instance))
+                transaction.on_commit(lambda: self._publish_event(instance))
 
             return Response(serializer.data)
 
