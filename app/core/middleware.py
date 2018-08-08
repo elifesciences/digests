@@ -4,6 +4,7 @@ from typing import Callable
 from django.conf import settings
 from django.http.request import HttpRequest as Request
 from django.http.response import HttpResponse as Response
+from django.views.decorators.cache import patch_cache_control
 
 LOGGER = getLogger(__name__)
 
@@ -44,5 +45,24 @@ def kong_authentication(get_response: Callable[[Request], Response]) \
         request = _set_can_preview(_set_can_modify(request, can_modify), can_preview)
 
         return get_response(request)
+
+    return middleware
+
+
+def downstream_caching(get_response: Callable[[Request], Response]) -> Callable[[Request], Response]:
+    def middleware(request: Request):
+        private_headers = {
+            'private': True,
+            'max-age': 0,
+            'must-revalidate': True,
+        }
+
+        response = get_response(request)
+        
+        if request.META.get(settings.AUTHORIZATION_PREVIEW_HEADER, False):
+            if not response.get('Cache-Control'):
+                patch_cache_control(response, **private_headers)
+
+        return response
 
     return middleware
