@@ -33,7 +33,6 @@ class DigestViewSet(viewsets.ModelViewSet):
     pagination_class = DigestPagination
     filter_backends = (DjangoFilterBackend, )
     filter_fields = ('stage',)
-    instance = None
 
     content_type = settings.DIGEST_CONTENT_TYPE
     list_content_type = settings.DIGESTS_CONTENT_TYPE
