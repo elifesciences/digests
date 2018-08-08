@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.db import models
 
 
 DIGEST_ID_FORMAT = r'^[A-Za-z0-9\-._]+$'

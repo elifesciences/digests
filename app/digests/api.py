@@ -1,7 +1,9 @@
 from collections import ChainMap
+from logging import getLogger
 from typing import Any, Dict
 
 from django.conf import settings
+from django.db import transaction
 
 from django_filters.rest_framework import DjangoFilterBackend
 from jsonschema import validate as validate_json
@@ -10,11 +12,18 @@ from rest_framework import viewsets, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from digests.events import DigestEvent
 from digests.exceptions import validation_error_handler
 from digests.models import Digest, PUBLISHED
 from digests.pagination import DigestPagination
 from digests.serializers import CreateDigestSerializer, DigestSerializer
 from digests.utils import get_schema, get_schema_name
+from elife_bus_sdk import get_publisher
+
+
+LOGGER = getLogger(__name__)
+
+event_publisher = get_publisher(config=settings.ELIFE_BUS)
 
 
 class DigestViewSet(viewsets.ModelViewSet):
@@ -38,6 +47,16 @@ class DigestViewSet(viewsets.ModelViewSet):
         return self.request.META.get(settings.AUTHORIZATION_PREVIEW_HEADER, False)
 
     @staticmethod
+    def _publish_event(instance: Digest) -> None:
+        try:
+            # could add a `DigestEvent` to `elife_bus_sdk`
+            # to replace the `Event` here, though functionality will not change.
+            LOGGER.info('_publish_event call for %s' % instance.id)
+            event_publisher.publish(DigestEvent(id=instance.id))
+        except (AttributeError, RuntimeError):
+            LOGGER.exception(f'Failed to publish event for digest {instance.id}')
+
+    @staticmethod
     def _validate_against_schema(request: Request, data: Dict) -> None:
         schema = get_schema(get_schema_name(request.content_type))
         validate_json(data, schema=schema)
@@ -54,11 +73,13 @@ class DigestViewSet(viewsets.ModelViewSet):
 
         try:
             self._validate_against_schema(request, data=request.data)
+            with transaction.atomic():
+                # validating the actual table fields as using the rules defined in the `Digest` model
+                serializer = CreateDigestSerializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                instance = serializer.save()
 
-            # validating the actual table fields as using the rules defined in the `Digest` model
-            serializer = CreateDigestSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+                transaction.on_commit(lambda: self._publish_event(instance))
 
             headers = self.get_success_headers(serializer.data)
 
@@ -90,22 +111,26 @@ class DigestViewSet(viewsets.ModelViewSet):
 
         try:
             partial = kwargs.pop('partial', False)
-            instance = self.get_object()
 
-            if partial:
-                # validatation for `PATCH` request
-                existing_instance = self.get_serializer(instance)
-                new_data = dict(ChainMap(request.data, existing_instance.data))
-            else:
-                # validation for `PUT` request
-                new_data = request.data
+            with transaction.atomic():
+                instance = self.get_object()
 
-            self._validate_against_schema(request, data=new_data)
+                if partial:
+                    # validatation for `PATCH` request
+                    existing_instance = self.get_serializer(instance)
+                    new_data = dict(ChainMap(request.data, existing_instance.data))
+                else:
+                    # validation for `PUT` request
+                    new_data = request.data
 
-            # validating the actual table fields as using the rules defined in the `Digest` model
-            serializer = self.get_serializer(instance, data=request.data, partial=partial)
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+                self._validate_against_schema(request, data=new_data)
+
+                # validating the actual table fields as using the rules defined in the `Digest` model
+                serializer = self.get_serializer(instance, data=request.data, partial=partial)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+
+                transaction.on_commit(lambda: self._publish_event(instance))
 
             return Response(serializer.data)
 
