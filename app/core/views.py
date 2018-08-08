@@ -12,5 +12,3 @@ def ping(request):
         'private': True,
     })
     return response
-
-
