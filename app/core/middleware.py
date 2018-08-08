@@ -49,7 +49,8 @@ def kong_authentication(get_response: Callable[[Request], Response]) \
     return middleware
 
 
-def downstream_caching(get_response: Callable[[Request], Response]) -> Callable[[Request], Response]:
+def downstream_caching(get_response: Callable[[Request], Response]) \
+        -> Callable[[Request], Response]:
     def middleware(request: Request):
         public_headers = {
             'public': True,
