@@ -8,8 +8,8 @@ DIGESTS_URL = '/digests'
 
 
 @pytest.mark.django_db
-def test_has_cache_control_header_when_authenticated(can_preview_header: Dict,
-                                                     client: Client):
+def test_has_private_cache_control_when_authenticated(can_preview_header: Dict,
+                                                      client: Client):
     response = client.get(DIGESTS_URL,
                           **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE},
                           **can_preview_header)
@@ -18,8 +18,10 @@ def test_has_cache_control_header_when_authenticated(can_preview_header: Dict,
 
 
 @pytest.mark.django_db
-def test_has_no_cache_control_header_when_unauthenticated(client: Client):
+def test_has_public_cache_control_when_unauthenticated(client: Client):
     response = client.get(DIGESTS_URL,
                           **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE})
     assert response.status_code == 200
-    assert not response.get('cache-control')
+    assert response['cache-control'] == 'public, max-age=300, ' \
+                                        'stale-while-revalidate=300, ' \
+                                        'stale-if-error=86400'
