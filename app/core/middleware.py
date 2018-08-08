@@ -67,12 +67,13 @@ def downstream_caching(get_response: Callable[[Request], Response]) \
 
         response = get_response(request)
 
-        if request.META.get(settings.AUTHORIZATION_PREVIEW_HEADER, False):
-            cache_headers = private_headers
-        else:
-            cache_headers = public_headers
+        if not response.get('Cache-Control'):
+            if request.META.get(settings.AUTHORIZATION_PREVIEW_HEADER, False):
+                cache_headers = private_headers
+            else:
+                cache_headers = public_headers
 
-        patch_cache_control(response, **cache_headers)
+            patch_cache_control(response, **cache_headers)
 
         return response
 
