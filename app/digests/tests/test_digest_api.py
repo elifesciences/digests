@@ -20,7 +20,7 @@ def test_can_get_digest(client: Client):
 
 @pytest.mark.django_db
 @pytest.mark.freeze_time('2018-01-01 00:00:00')
-def test_has_expected_data_in_response(can_preview_header,
+def test_has_expected_data_in_response(can_preview_header: Dict,
                                        client: Client,
                                        preview_digest: Digest,
                                        digest_image_json: Dict,
@@ -43,7 +43,7 @@ def test_has_expected_data_in_response(can_preview_header,
 
 
 @pytest.mark.django_db
-def test_can_get_digest_by_id(can_preview_header,
+def test_can_get_digest_by_id(can_preview_header: Dict,
                               client: Client,
                               preview_digest: Digest,
                               digest_json: Dict):
@@ -54,7 +54,8 @@ def test_can_get_digest_by_id(can_preview_header,
 
 
 @pytest.mark.django_db
-def test_has_digests_content_type_header(can_preview_header, client: Client):
+def test_has_digests_content_type_header(can_preview_header: Dict,
+                                         client: Client):
     response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE}, **can_preview_header)
     assert response.status_code == 200
     assert response.content_type == settings.DIGESTS_CONTENT_TYPE
@@ -116,7 +117,7 @@ def test_only_shows_published_digests_with_no_auth_header(client: Client, previe
 ])
 @pytest.mark.django_db
 def test_can_filter_on_digest_stage(stage: str,
-                                    can_preview_header,
+                                    can_preview_header: Dict,
                                     client: Client,
                                     preview_digest: Digest,
                                     published_digest: Digest):
