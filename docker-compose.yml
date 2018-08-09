@@ -28,7 +28,6 @@ services:
         command: >
             bash -c "./migrate.sh && exec venv/bin/newrelic-admin run-program venv/bin/uwsgi --ini=/srv/digests/uwsgi.ini --enable-threads"
         volumes:
-            #- ./config/app.cfg:/srv/digests/app.cfg
             - ./config/uwsgi.ini:/srv/digests/uwsgi.ini
         env_file:
             - dev.env
