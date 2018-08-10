@@ -18,4 +18,4 @@ COPY --chown=elife:elife app/ app/
 
 USER www-data
 CMD ["venv/bin/python"]
-HEALTHCHECK --interval=5s CMD bash -c "venv/bin/uwsgi_curl 127.0.0.1:9000 "localhost/ping" | grep pong"
+HEALTHCHECK --interval=5s CMD bash -c "venv/bin/uwsgi_curl 127.0.0.1:9000 localhost/ping | grep pong"
