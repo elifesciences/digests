@@ -174,6 +174,41 @@ def digest_related_content_json() -> List[Dict]:
 
 
 @pytest.fixture(scope='session')
+def multiple_related_content_json() -> List[Dict]:
+    return [
+        {
+            "type": "tools-resources",
+            "status": "vor",
+            "id": "34408",
+            "version": 1,
+            "doi": "10.7554/eLife.34408",
+            "authorLine": "Some author",
+            "title": "Some title",
+            "stage": "published",
+            "published": "2018-05-30T00:00:00Z",
+            "statusDate": "2018-05-30T00:00:00Z",
+            "volume": 7,
+            "elocationId": "e34408"
+        },
+        {
+            "type": "research-article",
+            "status": "vor",
+            "id": "33286",
+            "version": 1,
+            "doi": "10.7554/eLife.33286",
+            "authorLine": "Yue Zhou et al.",
+            "title": "Biosynthetic tailoring of existing ascaroside pheromones "
+                     "alters their biological function in <i>C. elegans</i>",
+            "stage": "published",
+            "published": "2018-06-04T00:00:00Z",
+            "statusDate": "2018-06-04T00:00:00Z",
+            "volume": 7,
+            "elocationId": "e33286"
+        }
+    ]
+
+
+@pytest.fixture(scope='session')
 def digest_subjects_json() -> List[Dict]:
     return [
         {
