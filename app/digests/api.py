@@ -48,13 +48,20 @@ class DigestViewSet(viewsets.ModelViewSet):
 
     @staticmethod
     def _filter_by_related_content_id(qs: QuerySet, content_id: str) -> QuerySet:
-        """Will filter by the first `relatedContent` `id` value if present.
+        """Will filter by `relatedContent` `id` value if present.
 
         :param qs: class: `QuerySet`
         :param content_id: str
         :return: class: `QuerySet`
         """
-        return qs.filter(relatedContent__0__id=content_id)
+        return qs.filter(
+            relatedContent__contains=[
+                {
+                    'id': content_id,
+                    'type': 'research-article'
+                }
+            ]
+        )
 
     @staticmethod
     def _publish_event(instance: Digest) -> None:
