@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from django.conf import settings
 from django.db import transaction
-
+from django.db.models import QuerySet
 from django_filters.rest_framework import DjangoFilterBackend
 from jsonschema import validate as validate_json
 from jsonschema import ValidationError
@@ -47,6 +47,16 @@ class DigestViewSet(viewsets.ModelViewSet):
         return self.request.META.get(settings.AUTHORIZATION_PREVIEW_HEADER, False)
 
     @staticmethod
+    def _filter_by_related_content_id(qs: QuerySet, content_id: str) -> QuerySet:
+        """Will filter by the first `relatedContent` `id` value if present.
+
+        :param qs: class: `QuerySet`
+        :param content_id: str
+        :return: class: `QuerySet`
+        """
+        return qs.filter(relatedContent__0__id=content_id)
+
+    @staticmethod
     def _publish_event(instance: Digest) -> None:
         try:
             # could add a `DigestEvent` to `elife_bus_sdk`
@@ -62,10 +72,17 @@ class DigestViewSet(viewsets.ModelViewSet):
         validate_json(data, schema=schema)
 
     def get_queryset(self):
+        article_id = self.request.query_params.get('article', None)
+
         if self._can_preview():
-            return Digest.objects.all()
+            qs = Digest.objects.all()
         else:
-            return Digest.objects.filter(stage=PUBLISHED)
+            qs = Digest.objects.filter(stage=PUBLISHED)
+
+        if article_id:
+            qs = self._filter_by_related_content_id(qs, article_id)
+
+        return qs
 
     def create(self, request: Request, *args, **kwargs) -> Response:
         if not self._can_modify() or not self._can_preview():
