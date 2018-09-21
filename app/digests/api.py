@@ -138,7 +138,7 @@ class DigestViewSet(viewsets.ModelViewSet):
 
                 transaction.on_commit(lambda: self._publish_event(instance))
 
-            return Response(status=204)
+            return Response(serializer.data, status=204)
 
         except ValidationError as err:
             err.code = status.HTTP_400_BAD_REQUEST
