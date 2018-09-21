@@ -62,11 +62,18 @@ def test_has_digests_content_type_header(can_preview_header: Dict,
 
 
 @pytest.mark.django_db
-def test_can_ingest_digest(rest_client: APIClient, digest_json: Dict, can_edit_headers: Dict):
+def test_can_ingest_digest_post(rest_client: APIClient, digest_json: Dict, can_edit_headers: Dict):
     response = rest_client.post(DIGESTS_URL, data=json.dumps(digest_json),
                                 content_type=settings.DIGEST_CONTENT_TYPE,
                                 **can_edit_headers)
     assert response.status_code == 201
+
+@pytest.mark.django_db
+def test_can_ingest_digest_put(rest_client: APIClient, digest_json: Dict, can_edit_headers: Dict):
+    response = rest_client.put(f'{DIGESTS_URL}/{digest_json["id"]}', data=json.dumps(digest_json),
+                                content_type=settings.DIGEST_CONTENT_TYPE,
+                                **can_edit_headers)
+    assert response.status_code == 204
 
 
 @pytest.mark.django_db
