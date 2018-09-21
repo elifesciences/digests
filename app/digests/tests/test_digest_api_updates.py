@@ -31,6 +31,8 @@ def test_can_update_digest_via_patch(key: str,
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
     assert response.status_code == 204
+    # TODO: extract in conftest.py and use across the 204-related tests
+    # to be able to remove the body
     get_response = json.loads(rest_client.get(f'{DIGESTS_URL}/{preview_digest.id}', **can_preview_header).content)
     assert get_response['id'] == '2'
     assert get_response[key] == value
