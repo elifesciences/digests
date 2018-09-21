@@ -4,6 +4,7 @@ from typing import Any, Dict
 
 from django.conf import settings
 from django.db import transaction
+from django.http.response import Http404
 
 from django_filters.rest_framework import DjangoFilterBackend
 from jsonschema import validate as validate_json
@@ -110,29 +111,34 @@ class DigestViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         try:
-            partial = kwargs.pop('partial', False)
+            patch = kwargs.pop('partial', False)
 
             with transaction.atomic():
-                instance = self.get_object()
 
-                if partial:
-                    # validatation for `PATCH` request
+                if patch:
+                    # validation for `PATCH` request
+                    instance = self.get_object()
                     existing_instance = self.get_serializer(instance)
                     new_data = dict(ChainMap(request.data, existing_instance.data))
+                    serializer = self.get_serializer(instance, data=request.data, partial=True)
                 else:
                     # validation for `PUT` request
                     new_data = request.data
+                    try:
+                        instance = self.get_object()
+                        serializer = self.get_serializer(instance, data=request.data)
+                    except Http404 as e:
+                        serializer = CreateDigestSerializer(data=request.data)
 
                 self._validate_against_schema(request, data=new_data)
 
                 # validating the actual table fields as using the rules defined in the `Digest` model
-                serializer = self.get_serializer(instance, data=request.data, partial=partial)
                 serializer.is_valid(raise_exception=True)
-                serializer.save()
+                instance = serializer.save()
 
                 transaction.on_commit(lambda: self._publish_event(instance))
 
-            return Response(serializer.data)
+            return Response(serializer.data, status=204)
 
         except ValidationError as err:
             err.code = status.HTTP_400_BAD_REQUEST

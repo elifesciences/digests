@@ -39,7 +39,7 @@ def test_can_send_event_when_patching_a_digest(event_publisher: MagicMock,
                                  data=json.dumps({'stage': 'published'}),
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
-    assert response.status_code == 200
+    assert response.status_code == 204
     assert event_publisher.assert_called
     assert event_publisher.publish.call_args[0] == (
         {'id': digest_json['id'], 'type': 'digest'},
@@ -57,7 +57,7 @@ def test_can_send_event_when_updating_a_digest_via_put(event_publisher: MagicMoc
                                data=json.dumps(digest_json),
                                content_type=settings.DIGEST_CONTENT_TYPE,
                                **can_edit_headers)
-    assert response.status_code == 200
+    assert response.status_code == 204
     assert event_publisher.assert_called
     assert event_publisher.publish.call_args[0] == (
         {'id': digest_json['id'], 'type': 'digest'},
