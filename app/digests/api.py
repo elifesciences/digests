@@ -111,23 +111,23 @@ class DigestViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         try:
-            partial = kwargs.pop('partial', False)
+            patch = kwargs.pop('partial', False)
 
             with transaction.atomic():
 
-                if partial:
+                if patch:
                     # validation for `PATCH` request
                     instance = self.get_object()
-                    serializer = self.get_serializer(instance, data=request.data, partial=partial)
+                    serializer = self.get_serializer(instance, data=request.data, partial=True)
                     existing_instance = self.get_serializer(instance)
                     new_data = dict(ChainMap(request.data, existing_instance.data))
                 else:
+                    # validation for `PUT` request
                     try:
                         instance = self.get_object()
-                        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+                        serializer = self.get_serializer(instance, data=request.data)
                     except Http404 as e:
                         serializer = CreateDigestSerializer(data=request.data)
-                    # validation for `PUT` request
                     new_data = request.data
 
                 self._validate_against_schema(request, data=new_data)
