@@ -35,6 +35,7 @@ services:
             #- goaws
             #- migrate
             - venv
+            - db
     db:
         image: postgres:9.4
         volumes:
