@@ -22,6 +22,7 @@ DIGESTS_URL = '/digests'
 def test_can_update_digest_via_patch(key: str,
                                      value: str,
                                      can_edit_headers: Dict,
+                                     can_preview_header: Dict,
                                      preview_digest: Digest,
                                      digest_json: Dict,
                                      rest_client: APIClient):
@@ -30,9 +31,10 @@ def test_can_update_digest_via_patch(key: str,
                                  content_type=settings.DIGEST_CONTENT_TYPE,
                                  **can_edit_headers)
     assert response.status_code == 204
-    assert response.data['id'] == '2'
-    assert response.data[key] == value
-    assert response.data['updated'] == '2018-01-01T00:00:00Z'
+    get_response = json.loads(rest_client.get(f'{DIGESTS_URL}/{preview_digest.id}', **can_preview_header).content)
+    assert get_response['id'] == '2'
+    assert get_response[key] == value
+    assert get_response['updated'] == '2018-01-01T00:00:00Z'
 
 
 @pytest.mark.django_db
