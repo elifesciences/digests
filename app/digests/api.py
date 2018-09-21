@@ -118,17 +118,17 @@ class DigestViewSet(viewsets.ModelViewSet):
                 if patch:
                     # validation for `PATCH` request
                     instance = self.get_object()
-                    serializer = self.get_serializer(instance, data=request.data, partial=True)
                     existing_instance = self.get_serializer(instance)
                     new_data = dict(ChainMap(request.data, existing_instance.data))
+                    serializer = self.get_serializer(instance, data=request.data, partial=True)
                 else:
                     # validation for `PUT` request
+                    new_data = request.data
                     try:
                         instance = self.get_object()
                         serializer = self.get_serializer(instance, data=request.data)
                     except Http404 as e:
                         serializer = CreateDigestSerializer(data=request.data)
-                    new_data = request.data
 
                 self._validate_against_schema(request, data=new_data)
 
