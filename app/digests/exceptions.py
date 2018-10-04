@@ -7,6 +7,11 @@ from rest_framework.response import Response
 LOGGER = logging.getLogger(__name__)
 
 
+class PaginationError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
 def format_error_path(path: List[str]) -> str:
     return '.'.join([str(item) for item in path])
 
@@ -25,5 +30,15 @@ def validation_error_handler(exception: Exception) -> Response:
     return Response(
         {'title': err_msg},
         status=exception.code,
+        content_type=settings.ERROR_CONTENT_TYPE
+    )
+
+
+def pagination_error_handler(exception: Exception) -> Response:
+    err_msg = str(exception)
+    LOGGER.exception(err_msg)
+    return Response(
+        {'title': err_msg},
+        status=400,
         content_type=settings.ERROR_CONTENT_TYPE
     )

@@ -14,7 +14,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from digests.events import DigestEvent
-from digests.exceptions import validation_error_handler
+from digests.exceptions import PaginationError, pagination_error_handler, validation_error_handler
 from digests.models import Digest, PUBLISHED
 from digests.pagination import DigestPagination
 from digests.serializers import CreateDigestSerializer, DigestSerializer
@@ -93,8 +93,13 @@ class DigestViewSet(viewsets.ModelViewSet):
     def list(self, request: Request, *args, **kwargs) -> Response:
         queryset = self.filter_queryset(self.get_queryset())
 
-        page = self.paginate_queryset(queryset)
-        serializer = self.get_serializer(page, many=True)
+        try:
+            DigestPagination.validate_parameters(request.query_params.get('page'), request.query_params.get('per-page'))
+        except PaginationError as err:
+            return pagination_error_handler(err)
+
+        results = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(results, many=True)
         return self.get_paginated_response(serializer.data)
 
     def retrieve(self, request: Request, *args, **kwargs) -> Response:
