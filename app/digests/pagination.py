@@ -26,12 +26,21 @@ class DigestPagination(pagination.PageNumberPagination):
     @staticmethod
     def validate_parameters(page_parameter, per_page_parameter):
         if page_parameter is not None:
-            page = int(page_parameter)
+            try:
+                page = int(page_parameter)
+            except ValueError as err:
+                raise PaginationError(f'`page` parameter is invalid') from err
+
             if not page >= 1:
-                raise PaginationError(f'`page` parameter `{page_parameter}` is too small')
+                raise PaginationError(f'`page` parameter is too small')
+
         if per_page_parameter is not None:
-            per_page = int(per_page_parameter)
+            try:
+                per_page = int(per_page_parameter)
+            except ValueError as err:
+                raise PaginationError(f'`per-page` parameter is invalid') from err
+
             if not per_page >= 1:
-                raise PaginationError(f'`per-page` parameter `{per_page_parameter}` is too small')
+                raise PaginationError(f'`per-page` parameter is too small')
             if not per_page <= DigestPagination.max_page_size:
-                raise PaginationError(f'`per-page` parameter `{per_page_parameter}` is too large')
+                raise PaginationError(f'`per-page` parameter is too large')
