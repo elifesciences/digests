@@ -152,14 +152,16 @@ def test_is_paginated(client: Client, multiple_published_digests):
     assert total == len(multiple_published_digests)
 
 @pytest.mark.django_db
-def test_invalid_page(client: Client):
+def test_page_too_small(client: Client):
     response = client.get(f'{DIGESTS_URL}?page=0')
     assert response.status_code == 400
+    assert response.data == {'title': '`page` parameter `0` is too small'}
 
 @pytest.mark.django_db
-def test_invalid_per_paged(client: Client, multiple_published_digests):
+def test_per_page_too_small(client: Client, multiple_published_digests):
     response = client.get(f'{DIGESTS_URL}?per-page=0')
     assert response.status_code == 400
+    assert response.data == {'title': '`per-page` parameter `0` is too small'}
 
 @pytest.mark.django_db
 def test_page_too_large(client: Client, multiple_published_digests):
@@ -171,3 +173,4 @@ def test_page_too_large(client: Client, multiple_published_digests):
 def test_per_page_too_large(client: Client, multiple_published_digests):
     response = client.get(f'{DIGESTS_URL}?per-page=101&page=1')
     assert response.status_code == 400
+    assert response.data == {'title': '`per-page` parameter `101` is too large'}

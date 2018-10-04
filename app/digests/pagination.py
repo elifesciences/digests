@@ -32,6 +32,6 @@ class DigestPagination(pagination.PageNumberPagination):
         if per_page_parameter is not None:
             per_page = int(per_page_parameter)
             if not per_page >= 1:
-                raise PaginationError(f'`per_page` parameter `{per_page_parameter}` is too small')
+                raise PaginationError(f'`per-page` parameter `{per_page_parameter}` is too small')
             if not per_page <= DigestPagination.max_page_size:
-                raise PaginationError(f'`per_page` parameter `{per_page_parameter}` is too large')
+                raise PaginationError(f'`per-page` parameter `{per_page_parameter}` is too large')
