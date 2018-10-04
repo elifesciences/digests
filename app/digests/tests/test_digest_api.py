@@ -1,6 +1,7 @@
 import copy
 import json
 from typing import Dict, List
+from unittest.mock import patch
 
 from django.conf import settings
 from django.test.client import Client
@@ -149,4 +150,28 @@ def test_is_paginated(client: Client, multiple_published_digests):
     total = sum([_count_items(page) for page in range(1, last_page)]) + _count_items(page=last_page)
 
     assert total == len(multiple_published_digests)
+
+@pytest.mark.django_db
+def test_invalid_page(client: Client):
+    response = client.get(f'{DIGESTS_URL}?page=0')
+    assert response.status_code == 404
+
+@pytest.mark.django_db
+def test_invalid_per_page_is_ignored(client: Client, multiple_published_digests):
+    response = client.get(f'{DIGESTS_URL}?per-page=0')
+    assert response.status_code == 200
+    assert len(response.data['items']) == len(multiple_published_digests)
+
+@pytest.mark.django_db
+def test_page_too_large(client: Client, multiple_published_digests):
+    all_digests = len(multiple_published_digests)
+    response = client.get(f'{DIGESTS_URL}?per-page={all_digests}&page=2')
+    assert response.status_code == 404
+
+@patch('digests.pagination.DigestPagination.max_page_size', 5)
+@pytest.mark.django_db
+def test_per_page_too_large(client: Client, multiple_published_digests):
+    response = client.get(f'{DIGESTS_URL}?per-page=10&page=1')
+    assert response.status_code == 200
+    assert len(response.data['items']) == 5
 
