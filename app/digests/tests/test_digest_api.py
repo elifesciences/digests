@@ -134,3 +134,19 @@ def test_can_filter_on_digest_stage(stage: str,
     assert response.data['total'] == 1
     assert response.data['items'][0]['stage'] == stage
 
+@pytest.mark.django_db
+def test_is_paginated(client: Client, multiple_published_digests):
+    per_page = 3
+    def _count_items(page):
+        response = client.get(f'{DIGESTS_URL}?per-page={per_page}&page={page}')
+        assert response.status_code == 200
+        assert response.data['total'] == len(multiple_published_digests)
+        items = len(response.data['items'])
+        assert items <= per_page
+        return items
+
+    last_page = 4
+    total = sum([_count_items(page) for page in range(1, last_page)]) + _count_items(page=last_page)
+
+    assert total == len(multiple_published_digests)
+

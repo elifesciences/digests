@@ -48,6 +48,20 @@ def published_digest(digest_json: Dict) -> Digest:
                                  title=digest_json['title'])
 
 
+@pytest.fixture
+def multiple_published_digests(digest_json: Dict) -> Digest:
+    how_many = 10
+    return [Digest.objects.create(id=str(digest_id),
+                                 content=digest_json['content'],
+                                 image=digest_json['image'],
+                                 impactStatement=digest_json['impactStatement'],
+                                 published=digest_json['published'],
+                                 relatedContent=digest_json['relatedContent'],
+                                 stage='published',
+                                 subjects=digest_json['subjects'],
+                                 title=digest_json['title']) for digest_id in range(1, how_many+1)]
+
+
 @pytest.fixture(scope='session')
 def digest_content_json() -> List[Dict]:
     return [
