@@ -1,6 +1,7 @@
 import copy
 import json
 from typing import Dict, List
+from unittest.mock import patch
 
 from django.conf import settings
 from django.test.client import Client
@@ -134,3 +135,54 @@ def test_can_filter_on_digest_stage(stage: str,
     assert response.data['total'] == 1
     assert response.data['items'][0]['stage'] == stage
 
+@pytest.mark.django_db
+def test_is_paginated(client: Client, multiple_published_digests):
+    per_page = 3
+    def _count_items(page):
+        response = client.get(f'{DIGESTS_URL}?per-page={per_page}&page={page}')
+        assert response.status_code == 200
+        assert response.data['total'] == len(multiple_published_digests)
+        items = len(response.data['items'])
+        assert items <= per_page
+        return items
+
+    last_page = 4
+    total = sum([_count_items(page) for page in range(1, last_page)]) + _count_items(page=last_page)
+
+    assert total == len(multiple_published_digests)
+
+@pytest.mark.django_db
+def test_page_invalid(client: Client):
+    response = client.get(f'{DIGESTS_URL}?page=the_second_one_please')
+    assert response.status_code == 400
+    assert response.data == {'title': '`page` parameter is invalid'}
+
+@pytest.mark.django_db
+def test_per_page_invalid(client: Client, multiple_published_digests):
+    response = client.get(f'{DIGESTS_URL}?per-page=as_many_as_you_can')
+    assert response.status_code == 400
+    assert response.data == {'title': '`per-page` parameter is invalid'}
+
+@pytest.mark.django_db
+def test_page_too_small(client: Client):
+    response = client.get(f'{DIGESTS_URL}?page=0')
+    assert response.status_code == 400
+    assert response.data == {'title': '`page` parameter is too small'}
+
+@pytest.mark.django_db
+def test_per_page_too_small(client: Client, multiple_published_digests):
+    response = client.get(f'{DIGESTS_URL}?per-page=0')
+    assert response.status_code == 400
+    assert response.data == {'title': '`per-page` parameter is too small'}
+
+@pytest.mark.django_db
+def test_page_too_large(client: Client, multiple_published_digests):
+    all_digests = len(multiple_published_digests)
+    response = client.get(f'{DIGESTS_URL}?per-page={all_digests}&page=2')
+    assert response.status_code == 404
+
+@pytest.mark.django_db
+def test_per_page_too_large(client: Client, multiple_published_digests):
+    response = client.get(f'{DIGESTS_URL}?per-page=101&page=1')
+    assert response.status_code == 400
+    assert response.data == {'title': '`per-page` parameter is too large'}
