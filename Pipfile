@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
+django = "~=2.1.2"
 elife-api-validator = {git = "https://github.com/elifesciences/api-validator-python.git", ref = "508c2684f39a424762c4168877d011c15c8c1dc8"}
 uwsgi = "*"
 dj-database-url = "*"
@@ -21,7 +21,7 @@ newrelic = "*"
 python_version = "3.6"
 
 [dev-packages]
-pytest = "~=3.5.1"
-pytest-django = "~=3.2.1"
+pytest = "*"
+pytest-django = "*"
 proofreader = "~=0.0.8"
 pytest-freezegun = "*"
