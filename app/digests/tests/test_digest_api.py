@@ -96,6 +96,24 @@ def test_is_ordered_by_descending_published_date(client: Client, preview_digest:
     assert response.data['items'][0]['id'] == '10'
     assert response.data['items'][0]['published'] == new_pub_date
 
+
+@pytest.mark.django_db
+def test_is_ordered_by_id_to_break_ties(client: Client, preview_digest: Digest,  digest_json: Dict):
+    # add second digest with newer id
+    digest_data = copy.deepcopy(digest_json)
+    digest_data['id'] = "%s" % (int(digest_json['id'])+1)
+
+    new_digest = Digest.objects.create(**digest_data)
+    new_digest.save()
+
+    response = client.get(DIGESTS_URL, **{'ACCEPT': settings.DIGESTS_CONTENT_TYPE,
+                                          settings.CONSUMER_GROUPS_HEADER: 'view-unpublished-content'})
+    assert response.status_code == 200
+    assert len(response.data['items']) == 2
+    # check largest id of digest is first
+    assert response.data['items'][0]['id'] == new_digest.id
+    assert response.data['items'][1]['id'] == digest_json['id']
+
     
 @pytest.mark.django_db
 def test_will_fail_to_ingest_digest_without_headers(rest_client: APIClient, digest_json: Dict):
