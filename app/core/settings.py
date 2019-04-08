@@ -5,12 +5,14 @@ from pythonjsonlogger.jsonlogger import JsonFormatter
 PROJECT_NAME = 'digests'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(BASE_DIR)
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 SECRET_KEY = os.environ.get('APP_SECRET', 'secret')
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT_NAME', 'dev')
 DEBUG = bool(os.environ.get('DEBUG', 0))
-DEFAULT_LOG_DIR = '/srv/digests/var/logs'
+IN_CONTAINER = os.path.exists('/srv/digests')
+DEFAULT_LOG_DIR = '/srv/digests/var/logs' if IN_CONTAINER else os.path.join(PROJECT_DIR, 'logs')
 DEFAULT_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
 INSTALLED_APPS = [

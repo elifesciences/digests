@@ -1,6 +1,6 @@
 /build/
-/logs/
 /var/
+logs/*.log
 __pycache__/
 .pytest_cache/
 venv/
