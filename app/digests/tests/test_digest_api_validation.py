@@ -75,5 +75,5 @@ def test_returns_400_for_invalid_content_data(can_edit_headers: Dict,
                                 content_type=settings.DIGEST_CONTENT_TYPE,
                                 **can_edit_headers)
     assert response.status_code == 400
-    assert response.data['title'] == "content.0 = {'foo': 'bar'} is not valid under any of the given schemas"
+    assert response.data['title'] == "'type' is a required property"
     assert response.content_type == settings.ERROR_CONTENT_TYPE
