@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "==2.1.6"
+django = "==2.1.8"
 elife-api-validator = {git = "https://github.com/elifesciences/api-validator-python.git", ref = "508c2684f39a424762c4168877d011c15c8c1dc8"}
 uwsgi = "*"
 dj-database-url = "*"
-"psycopg2" = "*"
+"psycopg2-binary" = "*"
 djangorestframework = "*"
 uwsgi-tools = "*"
 jsonschema = "*"
