@@ -7,7 +7,7 @@ ENV PROJECT_FOLDER=/srv/digests
 WORKDIR ${PROJECT_FOLDER}
 
 # TODO: possibly simplify this to use only pipenv rather than virtualenv?
-RUN virtualenv venv
+RUN virtualenv venv --python=python3.6
 ENV VIRTUAL_ENV=${PROJECT_FOLDER}/venv
 
 COPY Pipfile Pipfile.lock ./
