@@ -9,7 +9,7 @@ elife-api-validator = {git = "https://github.com/elifesciences/api-validator-pyt
 uwsgi = "*"
 dj-database-url = "*"
 "psycopg2-binary" = "*"
-djangorestframework = "==3.10.3"
+djangorestframework = "*"
 uwsgi-tools = "*"
 jsonschema = "*"
 elife-bus-sdk = "*"
