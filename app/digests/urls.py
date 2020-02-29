@@ -6,7 +6,7 @@ from digests.api import DigestViewSet
 
 
 router_v1 = routers.DefaultRouter(trailing_slash=False)
-router_v1.register('digests', DigestViewSet, base_name='digests')
+router_v1.register('digests', DigestViewSet, basename='digests')
 
 
 urlpatterns = [
