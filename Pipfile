@@ -3,22 +3,23 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-[packages]
-django = "~=2.2.13"
-elife-api-validator = {git = "https://github.com/elifesciences/api-validator-python.git", ref = "508c2684f39a424762c4168877d011c15c8c1dc8"}
-uwsgi = "*"
-dj-database-url = "*"
-"psycopg2-binary" = "*"
-djangorestframework = "*"
-uwsgi-tools = "*"
-jsonschema = "*"
-elife-bus-sdk = "*"
-django-filter = "*"
-python-json-logger = "*"
-newrelic = "*"
-
 [requires]
 python_version = "3.6"
+
+[packages]
+django = "==2.2.*"
+elife-api-validator = {git = "https://github.com/elifesciences/api-validator-python.git", ref = "508c2684f39a424762c4168877d011c15c8c1dc8"}
+uwsgi = "*"
+dj-database-url = "~=0.5"
+"psycopg2-binary" = "~=2.8"
+djangorestframework = "~=3.11"
+# necessary?
+uwsgi-tools = "*"
+jsonschema = "~=3.2"
+elife-bus-sdk = "==0.0.7"
+django-filter = "~=2.2"
+python-json-logger = "~=0.1"
+newrelic = "*"
 
 [dev-packages]
 pytest = "*"
