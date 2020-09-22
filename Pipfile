@@ -9,6 +9,10 @@ python_version = "3.6"
 [packages]
 django = "==2.2.*"
 elife-api-validator = {git = "https://github.com/elifesciences/api-validator-python.git", ref = "508c2684f39a424762c4168877d011c15c8c1dc8"}
+# elife-api-validator -> pylint -> isort
+# version 5 of isort breaks api. fix this in elife-api-validator
+# - https://github.com/PyCQA/isort/issues/1273
+isort = "~=4.2"
 uwsgi = "*"
 dj-database-url = "~=0.5"
 "psycopg2-binary" = "~=2.8"
