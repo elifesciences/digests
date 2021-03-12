@@ -28,5 +28,4 @@ newrelic = "*"
 [dev-packages]
 pytest = "*"
 pytest-django = "*"
-proofreader = "~=0.0.8"
 pytest-freezegun = "*"
