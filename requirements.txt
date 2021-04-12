@@ -1,15 +1,15 @@
-# file generated 2021-03-15 - see update-dependencies.sh
+# file generated 2021-04-12 - see update-dependencies.sh
 api-validator-python==0.0.2
 attrs==20.3.0
-boto3==1.17.27
-botocore==1.20.27
+boto3==1.17.49
+botocore==1.20.49
 dj-database-url==0.5.0
-Django==2.2.19
+Django==2.2.20
 django-filter==2.4.0
-djangorestframework==3.12.2
+djangorestframework==3.12.4
 elife-bus-sdk==0.0.7
 freezegun==1.1.0
-importlib-metadata==3.7.3
+importlib-metadata==3.10.0
 iniconfig==1.1.1
 isort==4.3.21
 jmespath==0.10.0
@@ -21,18 +21,18 @@ psycopg2-binary==2.8.6
 py==1.10.0
 pyparsing==2.4.7
 pyrsistent==0.17.3
-pytest==6.2.2
-pytest-django==4.1.0
+pytest==6.2.3
+pytest-django==4.2.0
 pytest-freezegun==0.4.2
 python-dateutil==2.8.1
 python-json-logger==0.1.11
 pytz==2021.1
-s3transfer==0.3.4
+s3transfer==0.3.6
 six==1.15.0
 sqlparse==0.4.1
 toml==0.10.2
 typing-extensions==3.7.4.3
-urllib3==1.26.3
+urllib3==1.26.4
 uWSGI==2.0.19.1
 uwsgi-tools==1.1.1
 zipp==3.4.1
