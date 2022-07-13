@@ -2,7 +2,7 @@ ARG image_tag=latest
 ARG python_version
 FROM elifesciences/digests_venv_dev:${image_tag} as venv
 FROM elifesciences/digests:${image_tag} as digests
-FROM elifesciences/python_3.6_pipenv:${python_version}
+FROM elifesciences/python_3.8:${python_version}
 
 ENV PROJECT_FOLDER=/srv/digests
 WORKDIR ${PROJECT_FOLDER}
