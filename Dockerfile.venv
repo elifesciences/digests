@@ -1,5 +1,5 @@
 ARG python_version
-FROM elifesciences/python_3.6_pipenv:${python_version}
+FROM elifesciences/python_3.8:${python_version}
 
 ARG pipenv_dev_arg
 
@@ -7,7 +7,7 @@ ENV PROJECT_FOLDER=/srv/digests
 WORKDIR ${PROJECT_FOLDER}
 
 # TODO: possibly simplify this to use only pipenv rather than virtualenv?
-RUN virtualenv venv --python=python3.6
+RUN virtualenv venv --python=python3.8
 ENV VIRTUAL_ENV=${PROJECT_FOLDER}/venv
 
 COPY Pipfile Pipfile.lock ./
