@@ -8,7 +8,7 @@ ENV PROJECT_FOLDER=/srv/digests
 WORKDIR ${PROJECT_FOLDER}
 
 USER root
-RUN mkdir /var/www build && \
+RUN mkdir -p /var/www build && \
     chown www-data:www-data /var/www build && \
     mkdir -p var/logs && \
     chown www-data:www-data var/logs
