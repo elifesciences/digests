@@ -17,19 +17,15 @@ services:
         volumes:
             - logs:/srv/digests/var/logs
     ci:
-        build: 
+        build:
             context: .
             dockerfile: Dockerfile.ci
             args:
                 python_version: ${PYTHON_VERSION}
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/digests_ci:${IMAGE_TAG}
-        #volumes:
-        #    - ./.git:/srv/digests/.git
         env_file:
             - dev.env
-        #environment:
-        #    - COVERALLS_REPO_TOKEN
         depends_on:
             - wsgi
             - venv-dev
