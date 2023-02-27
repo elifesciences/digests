@@ -1,11 +1,11 @@
-# file generated 2023-01-09 - see update-dependencies.sh
+# file generated 2023-02-27 - see update-dependencies.sh
 api-validator-python @ git+https://github.com/elifesciences/api-validator-python.git@508c2684f39a424762c4168877d011c15c8c1dc8
 asgiref==3.6.0
 attrs==22.2.0
-boto3==1.26.45
-botocore==1.29.45
+boto3==1.26.79
+botocore==1.29.79
 dj-database-url==0.5.0
-Django==3.2.16
+Django==3.2.18
 django-filter==2.4.0
 djangorestframework==3.14.0
 elife-bus-sdk==0.0.7
@@ -20,16 +20,16 @@ packaging==23.0
 pluggy==1.0.0
 psycopg2-binary==2.8.6
 pyrsistent==0.19.3
-pytest==7.2.0
+pytest==7.2.1
 pytest-django==4.5.2
 pytest-freezegun==0.4.2
 python-dateutil==2.8.2
 python-json-logger==0.1.11
-pytz==2022.7
+pytz==2022.7.1
 s3transfer==0.6.0
 six==1.16.0
 sqlparse==0.4.3
 tomli==2.0.1
-urllib3==1.26.13
+urllib3==1.26.14
 uWSGI==2.0.21
 uwsgi-tools==1.1.1
