@@ -9,7 +9,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 SECRET_KEY = os.environ.get('APP_SECRET', 'secret')
 
 ENVIRONMENT = os.environ.get('ENVIRONMENT_NAME', 'dev')
-DEBUG = bool(os.environ.get('DEBUG', 0))
+DEBUG = os.environ.get('DEBUG', '0') == '1'
 DEFAULT_LOG_DIR = '/srv/digests/var/logs'
 DEFAULT_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 
