@@ -11,6 +11,9 @@ RUN mkdir -p var/logs && \
     chown --recursive elife:elife . && \
     chown www-data:www-data var/logs
 
+RUN apt-get update -y && \
+    apt-get install curl -y --no-install-recommends
+
 COPY --chown=elife:elife smoke_tests_wsgi.sh .
 COPY --chown=elife:elife migrate.sh .
 COPY --from=venv --chown=elife:elife ${PROJECT_FOLDER}/venv/ venv/
