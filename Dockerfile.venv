@@ -8,7 +8,7 @@ ARG pipenv_dev_arg
 #       - https://packages.debian.org/bullseye/python3-dev
 USER root
 RUN apt-get update -y && \
-    apt-get install build-essential python3-dev clang git -y --no-install-recommends
+    apt-get install build-essential python3-dev clang git curl -y --no-install-recommends
 
 ENV PROJECT_FOLDER=/srv/digests
 WORKDIR ${PROJECT_FOLDER}
