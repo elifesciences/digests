@@ -9,7 +9,7 @@ elifePipeline {
     node('containers-jenkins-plugin') {
         stage 'Build images', {
             checkout scm
-            dockerComposeBuild(commit, ["no-cache": "true"])
+            dockerComposeBuild(commit)
         }
 
         stage 'Project tests', {
