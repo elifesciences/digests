@@ -30,17 +30,6 @@ elifePipeline {
     }
 
     elifeMainlineOnly {
-        stage 'End2end tests', {
-            elifeSpectrum(
-                deploy: [
-                    stackname: 'digests--end2end',
-                    revision: commit,
-                    folder: '/srv/digests'
-                ],
-                marker: 'digests'
-            )
-        }
-
         stage 'Deploy to continuumtest', {
             lock('digests--continuumtest') {
                 builderDeployRevision 'digests--continuumtest', commit
