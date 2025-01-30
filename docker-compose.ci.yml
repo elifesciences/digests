@@ -24,6 +24,7 @@ services:
             target: ci
             args:
                 python_version: ${PYTHON_VERSION}
+                pipenv_dev_arg: --dev
                 image_tag: ${IMAGE_TAG}
         image: elifesciences/digests_ci:${IMAGE_TAG}
         env_file:

@@ -25,6 +25,7 @@ services:
             target: digests
             args:
                 image_tag: "${IMAGE_TAG}"
+                pipenv_dev_arg: ${PIPENV_DEV_ARG}
                 python_version: ${PYTHON_VERSION}
         image: elifesciences/digests:${IMAGE_TAG}
         command: >
