@@ -8,7 +8,8 @@ services:
     venv-dev:
         build:
             context: .
-            dockerfile: Dockerfile.venv
+            dockerfile: Dockerfile
+            target: venv
             args:
                 pipenv_dev_arg: --dev
                 python_version: ${PYTHON_VERSION}
@@ -19,7 +20,8 @@ services:
     ci:
         build:
             context: .
-            dockerfile: Dockerfile.ci
+            dockerfile: Dockerfile
+            target: ci
             args:
                 python_version: ${PYTHON_VERSION}
                 image_tag: ${IMAGE_TAG}

@@ -4,7 +4,8 @@ services:
     venv:
         build:
             context: .
-            dockerfile: Dockerfile.venv
+            dockerfile: Dockerfile
+            target: venv
             args:
                 pipenv_dev_arg: ${PIPENV_DEV_ARG}
                 python_version: ${PYTHON_VERSION}
@@ -18,9 +19,10 @@ services:
         depends_on:
             - wsgi
     wsgi:
-        build: 
+        build:
             context: .
             dockerfile: Dockerfile
+            target: digests
             args:
                 image_tag: "${IMAGE_TAG}"
                 python_version: ${PYTHON_VERSION}
