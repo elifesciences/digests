@@ -15,7 +15,6 @@ Authorization: {{authToken}}
 ### Get Public Digests
 
 GET {{digestsEndpoint}} HTTP/1.1
-X-Consumer-Groups: view-unpublished-content,edit-digests
 
 ### Get Also Unpublished Digests
 
