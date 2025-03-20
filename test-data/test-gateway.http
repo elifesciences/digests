@@ -1,0 +1,27 @@
+# Note: Requires .env with TEST_API_KEY (see .env.template)
+
+@authToken = {{$dotenv TEST_API_KEY}}
+@digestsEndpoint = https://api.test.elifesciences.org/digests
+# @digestsEndpoint = https://continuumtest--gateway.elifesciences.org/digests
+
+### Create Unpublished Digest
+
+POST {{digestsEndpoint}} HTTP/1.1
+Content-Type: application/vnd.elife.digest+json;version=1
+Authorization: {{authToken}}
+
+< ./test-data/digest-1.json
+
+### Get Public Digests
+
+GET {{digestsEndpoint}} HTTP/1.1
+
+### Get Also Unpublished Digests
+
+GET {{digestsEndpoint}} HTTP/1.1
+Authorization: {{authToken}}
+
+### Delete Digest
+
+DELETE {{digestsEndpoint}} HTTP/1.1
+Authorization: {{authToken}}
