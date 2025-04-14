@@ -19,3 +19,9 @@ start: logs
 
 clean:
 	$(DOCKER_COMPOSE) down -v
+
+.PHONY: replace-test-env-rds-state-with-prod-copy
+replace-test-env-rds-state-with-prod-copy:
+	echo dump prod RDS
+	echo drop all test env tables
+	echo apply prod dump to test RDS
