@@ -20,8 +20,19 @@ start: logs
 clean:
 	$(DOCKER_COMPOSE) down -v
 
+include deployed-environments.env
+export
+
 .PHONY: replace-test-env-rds-state-with-prod-copy
 replace-test-env-rds-state-with-prod-copy:
+	kubectl run psql \
+	--rm -it --image=postgres:13.16 \
+	--namespace journal--test \
+	--env=PGHOST=$(PGHOST) \
+	--env=PGDATABASE=$(PGDATABASE) \
+	--env=PGUSER=$(PGUSER) \
+	--env=PGPASSWORD=$(PGPASSWORD) \
+	-- psql
 	echo dump prod RDS
 	echo drop all test env tables
 	echo apply prod dump to test RDS
