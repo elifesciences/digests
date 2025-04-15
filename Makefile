@@ -10,9 +10,11 @@ logs:
 build:
 	$(DOCKER_COMPOSE) build
 
-test: logs
-	$(DOCKER_COMPOSE) run wsgi \
+test:
+	$(DOCKER_COMPOSE_MULTISTAGE) up --build -d
+	$(DOCKER_COMPOSE_MULTISTAGE) run wsgi \
 		venv/bin/pytest app/digests/tests/test_digest_api.py
+	$(DOCKER_COMPOSE_MULTISTAGE) down
 
 start: logs
 	$(DOCKER_COMPOSE) up -d web
