@@ -26,13 +26,15 @@ export
 .PHONY: replace-test-env-rds-state-with-prod-copy
 replace-test-env-rds-state-with-prod-copy:
 	kubectl run psql \
-	--rm -it --image=postgres:13.16 \
+	--image=postgres:13.16 \
 	--namespace journal--test \
 	--env=PGHOST=$(PGHOST) \
 	--env=PGDATABASE=$(PGDATABASE) \
 	--env=PGUSER=$(PGUSER) \
 	--env=PGPASSWORD=$(PGPASSWORD) \
-	-- psql
-	echo dump prod RDS
+	-- sleep 600
+	kubectl wait --namespace journal--test --for condition=Ready pod psql
+	kubectl exec --namespace journal--test psql -- psql -A -t -c "COPY digests_digest TO STDOUT WITH (FORMAT CSV, HEADER);" > digests_digest.csv
+	kubectl delete --namespace journal--test pod psql
 	echo drop all test env tables
 	echo apply prod dump to test RDS
