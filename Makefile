@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 
 DOCKER_COMPOSE_DEV = docker compose
-DOCKER_COMPOSE_CI = docker compose -f docker-compose.yml -f docker-compose.ci.yml
 DOCKER_COMPOSE_MULTISTAGE = docker compose -f docker-compose.multistage.yml
 DOCKER_COMPOSE = $(DOCKER_COMPOSE_DEV)
 
