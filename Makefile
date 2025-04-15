@@ -36,10 +36,12 @@ replace-test-env-rds-state-with-prod-copy:
 	kubectl wait --namespace journal--test --for condition=Ready pod psql
 	kubectl exec --namespace journal--test psql -- psql -A -t -c "COPY digests_digest TO STDOUT WITH (FORMAT CSV, HEADER);" > digests_digest.csv
 	kubectl delete --namespace journal--test pod psql
+
 	kubectl run psql \
 	--image=postgres:13.16 \
 	--namespace journal--test \
 	--overrides='{"spec": {"containers":[{"name": "psql", "image": "postgres:13.16", "args": ["sleep", "600"], "envFrom":[{ "secretRef": { "name": "digests-database-secret" } }]}]}}'
-
-	echo drop all test env tables
-	echo apply prod dump to test RDS
+	kubectl exec --namespace journal--test psql -- psql -c "TRUNCATE digests_digest"
+	kubectl cp --namespace journal--test ./digests_digest.csv psql:/digests_digest.csv
+	kubectl exec --namespace journal--test psql -- psql -c "\copy digests_digest FROM '/digests_digest.csv' WITH CSV HEADER"
+	kubectl delete --namespace journal--test pod psql
