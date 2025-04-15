@@ -51,13 +51,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build and push client image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          load: false
-          # Disabled another image with ARM support can be used as a base
-          # platforms: linux/amd64,linux/arm64
-          target: prod
-          tags: |
-            ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
+      - name: Build image
+        run: |
+          docker compose build
