@@ -38,7 +38,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     env:
       IMAGE_REPO: ghcr.io/elifesciences/digests
-      CI_IMAGE_TAG: ${{ needs.generate-version.outputs.trunkver }}
+      IMAGE_TAG: ${{ needs.generate-version.outputs.trunkver }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
