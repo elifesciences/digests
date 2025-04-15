@@ -3,7 +3,7 @@ ARG python_version=ae2079709b038188c2affb7561be96677ae432bc
 
 
 
-FROM elifesciences/python_3.8:${python_version} as venv
+FROM elifesciences/python_3.8:${python_version} AS venv
 
 ARG pipenv_dev_arg
 
@@ -27,7 +27,7 @@ RUN pipenv install ${pipenv_dev_arg} --deploy
 
 
 
-FROM elifesciences/python_3.8:${python_version}
+FROM elifesciences/python_3.8:${python_version} AS prod
 
 ENV PROJECT_FOLDER=/srv/digests
 WORKDIR ${PROJECT_FOLDER}
