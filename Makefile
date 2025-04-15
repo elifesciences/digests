@@ -24,6 +24,12 @@ clean:
 ci-test:
 	$(DOCKER_COMPOSE_CI) run ci bash project_tests.sh
 
+.PHONY: ci-smoketest
+ci-smoketest:
+	$(DOCKER_COMPOSE_CI) up -d
+	$(DOCKER_COMPOSE_CI) exec wsgi bash ./smoke_tests_wsgi.sh
+	$(DOCKER_COMPOSE_CI) down
+
 include deployed-environments.env
 export
 
