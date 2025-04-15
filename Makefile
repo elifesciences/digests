@@ -23,7 +23,9 @@ clean:
 
 .PHONY: ci-test
 ci-test:
-	$(DOCKER_COMPOSE_CI) run ci bash project_tests.sh
+	$(DOCKER_COMPOSE_MULTISTAGE) up --build -d
+	$(DOCKER_COMPOSE_MULTISTAGE) exec wsgi bash project_tests.sh
+	$(DOCKER_COMPOSE_MULTISTAGE) down
 
 .PHONY: ci-smoketest
 ci-smoketest:

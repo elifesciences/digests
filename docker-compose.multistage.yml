@@ -11,6 +11,7 @@ services:
             - wsgi
     wsgi:
         build:
+            target: dev
             context: .
             dockerfile: Dockerfile.multistage
         command: >
