@@ -2,6 +2,7 @@
 
 DOCKER_COMPOSE_DEV = docker compose
 DOCKER_COMPOSE_CI = docker compose -f docker-compose.yml -f docker-compose.ci.yml
+DOCKER_COMPOSE_MULTISTAGE = docker compose -f docker-compose.multistage.yml
 DOCKER_COMPOSE = $(DOCKER_COMPOSE_DEV)
 
 logs:
@@ -26,9 +27,9 @@ ci-test:
 
 .PHONY: ci-smoketest
 ci-smoketest:
-	$(DOCKER_COMPOSE_CI) up -d
-	$(DOCKER_COMPOSE_CI) exec wsgi bash ./smoke_tests_wsgi.sh
-	$(DOCKER_COMPOSE_CI) down
+	$(DOCKER_COMPOSE_MULTISTAGE) up -d
+	$(DOCKER_COMPOSE_MULTISTAGE) exec wsgi bash ./smoke_tests_wsgi.sh
+	$(DOCKER_COMPOSE_MULTISTAGE) down
 
 include deployed-environments.env
 export
