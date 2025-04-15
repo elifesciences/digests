@@ -1,0 +1,5 @@
+[tools]
+awscli = "latest"
+kubecolor = "latest"
+kubectl = "latest"
+kubie = "latest"
