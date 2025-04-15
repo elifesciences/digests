@@ -27,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: touch deployed-environments.env # This should be removed after migration from legacy infrastructure
       - name: Project Tests
         run: make ci-test
       - name: Smoketest
