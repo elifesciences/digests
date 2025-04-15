@@ -27,7 +27,7 @@ ci-test:
 
 .PHONY: ci-smoketest
 ci-smoketest:
-	$(DOCKER_COMPOSE_MULTISTAGE) up -d
+	$(DOCKER_COMPOSE_MULTISTAGE) -f docker-compose.prod.yml up -d
 	$(DOCKER_COMPOSE_MULTISTAGE) exec wsgi bash ./smoke_tests_wsgi.sh
 	$(DOCKER_COMPOSE_MULTISTAGE) down
 
