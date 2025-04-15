@@ -45,3 +45,27 @@ replace-test-env-rds-state-with-prod-copy:
 	kubectl cp --namespace journal--test ./digests_digest.csv psql:/digests_digest.csv
 	kubectl exec --namespace journal--test psql -- psql -c "\copy digests_digest FROM '/digests_digest.csv' WITH CSV HEADER"
 	kubectl delete --namespace journal--test pod psql
+
+
+.PHONY: replace-prod-env-rds-state-with-prod-copy
+replace-prod-env-rds-state-with-prod-copy:
+	kubectl run psql \
+	--image=postgres:13.16 \
+	--namespace journal--prod \
+	--env=PGHOST=$(PGHOST) \
+	--env=PGDATABASE=$(PGDATABASE) \
+	--env=PGUSER=$(PGUSER) \
+	--env=PGPASSWORD=$(PGPASSWORD) \
+	-- sleep 600
+	kubectl wait --namespace journal--prod --for condition=Ready pod psql
+	kubectl exec --namespace journal--prod psql -- psql -A -t -c "COPY digests_digest TO STDOUT WITH (FORMAT CSV, HEADER);" > digests_digest.csv
+	kubectl delete --namespace journal--prod pod psql
+
+	kubectl run psql \
+	--image=postgres:13.16 \
+	--namespace journal--prod \
+	--overrides='{"spec": {"containers":[{"name": "psql", "image": "postgres:13.16", "args": ["sleep", "600"], "envFrom":[{ "secretRef": { "name": "digests-database-secret" } }]}]}}'
+	kubectl exec --namespace journal--prod psql -- psql -c "TRUNCATE digests_digest"
+	kubectl cp --namespace journal--prod ./digests_digest.csv psql:/digests_digest.csv
+	kubectl exec --namespace journal--prod psql -- psql -c "\copy digests_digest FROM '/digests_digest.csv' WITH CSV HEADER"
+	kubectl delete --namespace journal--prod pod psql
