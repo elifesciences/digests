@@ -3,9 +3,7 @@ ARG python_version=ae2079709b038188c2affb7561be96677ae432bc
 
 
 
-FROM elifesciences/python_3.8:${python_version} AS venv
-
-ARG pipenv_dev_arg
+FROM elifesciences/python_3.8:${python_version} AS python-base
 
 # lsh@2022-07-27: uwsgi needs to be built, uncertain how it was happening before.
 # note: 'python3-dev' under 'elifesciences/python_3.8' will install python3.9-dev and python3.9.
@@ -20,19 +18,16 @@ WORKDIR ${PROJECT_FOLDER}
 RUN python3.8 -m venv venv
 ENV VIRTUAL_ENV=${PROJECT_FOLDER}/venv
 
+
+
+FROM python-base AS prod-venv
 COPY Pipfile Pipfile.lock ./
-RUN pipenv install ${pipenv_dev_arg} --deploy
+RUN pipenv install --deploy
 
 
 
+FROM python-base AS prod
 
-
-FROM elifesciences/python_3.8:${python_version} AS prod
-
-ENV PROJECT_FOLDER=/srv/digests
-WORKDIR ${PROJECT_FOLDER}
-
-USER root
 RUN mkdir -p var/logs && \
     chown --recursive elife:elife . && \
     chown www-data:www-data var/logs
@@ -42,7 +37,7 @@ RUN apt-get update -y && \
 
 COPY --chown=elife:elife smoke_tests_wsgi.sh .
 COPY --chown=elife:elife migrate.sh .
-COPY --from=venv --chown=elife:elife ${PROJECT_FOLDER}/venv/ venv/
+COPY --from=prod-venv --chown=elife:elife ${PROJECT_FOLDER}/venv/ venv/
 COPY --chown=elife:elife app/ app/
 
 USER www-data
