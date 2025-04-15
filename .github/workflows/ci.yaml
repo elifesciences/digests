@@ -23,19 +23,12 @@ jobs:
         with:
           prerelease: ${{ github.ref == 'refs/heads/master' && 'false' || 'true' }}
       - run: echo ${{ steps.trunkver.outputs.trunkver }}
-  # tests:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Bring up test stack
-  #       run: docker compose up --wait
-  #     - name: Debug bring up test stack
-  #       if: failure()
-  #       run: docker compose logs
-  #     - name: Project Tests
-  #       run: docker compose exec app bash ./project_tests.sh
-  #     - name: Smoke Tests
-  #       run: docker compose exec app bash ./smoke_tests.sh
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Project Tests
+        run: make ci-test
   # build-and-push:
   #   needs: [generate-version, tests]
   #   runs-on: ubuntu-latest
