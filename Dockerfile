@@ -1,16 +1,13 @@
 ARG image_tag=latest
-ARG python_version=ae2079709b038188c2affb7561be96677ae432bc
 
-
-
-FROM elifesciences/python_3.8:${python_version} AS python-base
+FROM ghcr.io/elifesciences/python:3.8 AS python-base
 
 # lsh@2022-07-27: uwsgi needs to be built, uncertain how it was happening before.
 # note: 'python3-dev' under 'elifesciences/python_3.8' will install python3.9-dev and python3.9.
 #       - https://packages.debian.org/bullseye/python3-dev
 USER root
 RUN apt-get update -y && \
-    apt-get install build-essential python3-dev clang git -y --no-install-recommends
+    apt-get install build-essential python3-dev clang git libpq-dev -y --no-install-recommends
 
 ENV PROJECT_FOLDER=/srv/digests
 WORKDIR ${PROJECT_FOLDER}
