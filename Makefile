@@ -7,7 +7,7 @@ test: ci-test
 
 .PHONY: start
 start:
-	$(DOCKER_COMPOSE) up --wait
+	$(DOCKER_COMPOSE) up --wait --build
 	@echo Server running: http://localhost:8080/digests
 
 .PHONY: stop
