@@ -11,7 +11,7 @@ services:
             - wsgi
     wsgi:
         build:
-            target: dev
+            target: prod
             context: .
         command: >
             bash -c "./migrate.sh && exec venv/bin/uwsgi --ini=/srv/digests/uwsgi.ini --enable-threads"
