@@ -58,6 +58,6 @@ jobs:
           # Disabled until another image with ARM support can be used as a base
           # platforms: linux/amd64,linux/arm64
           target: prod
-          file: Dockerfile.multistage
+          file: Dockerfile
           tags: |
             ${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}

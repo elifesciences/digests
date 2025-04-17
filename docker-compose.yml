@@ -13,7 +13,6 @@ services:
         build:
             target: dev
             context: .
-            dockerfile: Dockerfile.multistage
         command: >
             bash -c "./migrate.sh && exec venv/bin/uwsgi --ini=/srv/digests/uwsgi.ini --enable-threads"
         volumes:
