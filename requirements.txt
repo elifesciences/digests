@@ -12,7 +12,7 @@ djangorestframework==3.15.0
 elife-bus-sdk==0.0.7
 exceptiongroup==1.2.0
 freezegun==1.4.0
-iniconfig==2.0.0
+iniconfig==2.3.0
 isort==4.3.21
 jmespath==1.0.1
 jsonschema==3.2.0
