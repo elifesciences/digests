@@ -22,7 +22,7 @@ services:
         depends_on:
             - db
     db:
-        image: postgres:9.4
+        image: postgres:13.20
         volumes:
             - ./config/application_user.sql:/docker-entrypoint-initdb.d/application_user.sql
         ports:
