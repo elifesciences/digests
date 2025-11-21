@@ -7,7 +7,7 @@ name = "pypi"
 python_version = "3.8"
 
 [packages]
-django = "==3.2.*"
+django = "==4.2.*"
 api-validator-python = {git = "https://github.com/elifesciences/api-validator-python.git",ref = "508c2684f39a424762c4168877d011c15c8c1dc8"}
 # elife-api-validator -> pylint -> isort
 # version 5 of isort breaks api. fix this in elife-api-validator
