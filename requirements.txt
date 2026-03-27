@@ -17,7 +17,7 @@ isort==4.3.21
 jmespath==1.0.1
 jsonschema==3.2.0
 packaging==24.0
-pluggy==1.4.0
+pluggy==1.6.0
 psycopg2-binary==2.8.6
 pyrsistent==0.20.0
 pytest==8.1.1
