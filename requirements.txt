@@ -18,7 +18,7 @@ jmespath==1.0.1
 jsonschema==3.2.0
 packaging==24.0
 pluggy==1.4.0
-psycopg2-binary==2.8.6
+psycopg2-binary==2.9.12
 pyrsistent==0.20.0
 pytest==8.1.1
 pytest-django==4.8.0
